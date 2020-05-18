@@ -1,2 +1,1 @@
-# macuahuitl
-The "Macuahuitl" Generative Art Toolbox
+# The "Macuahuitl" Generative Art Toolbox
