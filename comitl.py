@@ -15,7 +15,7 @@ import argparse
 
 
 __author__  = 'Christian Rosentreter'
-__version__ = '1.1'
+__version__ = '1.2'
 __all__     = []
 
 
@@ -23,7 +23,7 @@ ap = argparse.ArgumentParser(
 	description=('Concentrically arranges randomly sized arcs into a pretty disc shape. Output is generated '
 				'as a set of vector shapes in Scalable Vector Graphics (SVG) format and printed on the '
 				'standard output stream.'),
-	epilog='Mail bug reports and suggestions to <{}-comitl{}binaryriot{}>.'.format('feedback', chr(0x40), '.org'),
+	epilog='Report bugs, request features, or provide suggestions via https://github.com/the-real-tokai/macuahuitl/issues',
 	add_help=False,
 )
 
@@ -35,12 +35,12 @@ g = ap.add_argument_group('Algorithm')
 g.add_argument('--circles',      metavar='INT',    type=int,   help='number of concentric arc elements to generate inside the disc  [:21]', default=21)
 g.add_argument('--stroke-width', metavar='FLOAT',  type=float, help='width of the generated strokes  [:6]', default=6.0)
 g.add_argument('--gap',          metavar='FLOAT',  type=float, help='distance between the generated strokes')
-g.add_argument('--inner-radius', metavar='FLOAT',  type=float, help='setup an inner disc radius to create an annular shape')
+g.add_argument('--inner-radius', metavar='FLOAT',  type=float, help='setup inner disc radius to create an annular shape')
 g.add_argument('--hoffset',      metavar='FLOAT',  type=float, help='shift the whole disc horizontally  [:0.0]', default=0.0)
 g.add_argument('--voffset',      metavar='FLOAT',  type=float, help='shift the whole disc vertically  [:0.0]', default=0.0)
 g.add_argument('--colour',       metavar='COLOUR', type=str,   help='SVG compliant colour specification or identifier  [:black]', default='black')
 g.add_argument('--random-seed',  metavar='INT',    type=int,   help='fixed initialisation of the random number generator for predictable results')
-g.add_argument('--randomise',    action='store_true',          help='generate truly random discs layouts; other provided values are utilized as limits')
+g.add_argument('--randomise',    action='store_true',          help='generate truly random disc layouts; values provided via other commandline parameters are utilised as limits')
 
 user_input = ap.parse_args()
 
@@ -68,7 +68,7 @@ vb_offset = radius + ((circles + 1) * (stroke + gap))
 
 print('<svg width="100%" height="100%" viewBox="{o} {o} {s} {s}"'.format(o=(-vb_offset), s=(vb_offset * 2)),
 	 ' xmlns="http://www.w3.org/2000/svg">',
-	 '<path d="', sep='', end='')
+	 '<g id="comitl-disc"><path id="arcs" d="', sep='', end='')
 
 
 for circle in range(0, circles):
@@ -93,5 +93,5 @@ for circle in range(0, circles):
 
 
 print('" stroke="{}" stroke-width="{}" stroke-linecap="round" fill="none"/>'.format(colour, stroke),
-	'<circle cx="{}" cy="{}" r="{}" stroke="{}" stroke-width="{}" fill="none"/>'.format(x, y, radius, colour, stroke),
-	'</svg>', sep='', end='')
+	'<circle id="outline" cx="{}" cy="{}" r="{}" stroke="{}" stroke-width="{}" fill="none"/>'.format(x, y, radius, colour, stroke),
+	'</g></svg>', sep='', end='')
