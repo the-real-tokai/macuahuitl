@@ -1,0 +1,15 @@
+[MESSAGES CONTROL]
+# Sanity.
+disable=mixed-indentation,
+	invalid-name,
+	too-many-arguments,
+	too-many-nested-blocks,
+	too-many-branches,
+	too-many-statements,
+	too-few-public-methods,
+	too-many-instance-attributes,
+	too-many-locals,
+	bad-continuation,
+	line-too-long,
+	bad-whitespace,
+	import-outside-toplevel
