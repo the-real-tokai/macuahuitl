@@ -6,7 +6,7 @@
 	Copyright © 2020 Christian Rosentreter
 	All rights reserved.
 
-	$Id: comitl.py 1 2020-05-16 00:00:00Z tokai $
+	$Id: comitl.py 78 2020-05-19 00:29:23Z tokai $
 """
 
 import math
@@ -15,14 +15,14 @@ import argparse
 
 
 __author__  = 'Christian Rosentreter'
-__version__ = '1.2'
+__version__ = '1.3'
 __all__     = []
 
 
 ap = argparse.ArgumentParser(
-	description=('Concentrically arranges randomly sized arcs into a pretty disc shape. Output is generated '
-				'as a set of vector shapes in Scalable Vector Graphics (SVG) format and printed on the '
-				'standard output stream.'),
+	description=('Concentrically arranges randomly sized arcs into a pretty disc shape. Output is '
+		'generated as a set of vector shapes in Scalable Vector Graphics (SVG) format and printed '
+		'on the standard output stream.'),
 	epilog='Report bugs, request features, or provide suggestions via https://github.com/the-real-tokai/macuahuitl/issues',
 	add_help=False,
 )
@@ -64,14 +64,9 @@ if user_input.randomise:
 	colour  = '#{:02x}{:02x}{:02x}'.format(chaos.randrange(0, 255), chaos.randrange(0, 255), chaos.randrange(0, 255))
 
 
-vb_offset = radius + ((circles + 1) * (stroke + gap))
+arcs = []
 
-print('<svg width="100%" height="100%" viewBox="{o} {o} {s} {s}"'.format(o=(-vb_offset), s=(vb_offset * 2)),
-	 ' xmlns="http://www.w3.org/2000/svg">',
-	 '<g id="comitl-disc"><path id="arcs" d="', sep='', end='')
-
-
-for circle in range(0, circles):
+for circle in range(circles):
 	theta = chaos.uniform(0, 2) * math.pi + math.pi
 	t1    = -(chaos.uniform(0, 2) * math.pi + theta)
 	t2    = -(chaos.uniform(0, 2) * math.pi + theta)
@@ -79,19 +74,23 @@ for circle in range(0, circles):
 	if t1 < t2:
 		t1, t2 = t2, t1
 
-	print('M {sx} {sy}'.format(
+	arcs.append('M {sx} {sy} A {r} {r} 0 {f} 1 {dx} {dy}'.format(
 		sx=round(x + radius * math.sin(t1), 9),
-		sy=round(y + radius * math.cos(t1), 9)
-	), 'A {r} {r} 0 {f} 1 {dx} {dy}'.format(
+		sy=round(y + radius * math.cos(t1), 9),
 		r=radius,
 		f=int(t1 - t2 > math.pi),
 		dx=round(x + radius * math.sin(t2), 9),
 		dy=round(y + radius * math.cos(t2), 9)
-	), end=(' ' if circles - circle > 1 else ''))
+	))
 
 	radius += (gap + stroke)
 
 
-print('" stroke="{}" stroke-width="{}" stroke-linecap="round" fill="none"/>'.format(colour, stroke),
+vb_dim = radius + ((gap + stroke) * 2)  # Needs some extra space for the outline too.
+
+print('<svg width="100%" height="100%" viewBox="{o} {o} {s} {s}" xmlns="http://www.w3.org/2000/svg">'.format(o=(-vb_dim), s=(vb_dim * 2)),
+	'<g id="comitl-disc">',
+	'<path id="arcs" d="', ' '.join(arcs), '" stroke="{}" stroke-width="{}" stroke-linecap="round" fill="none"/>'.format(colour, stroke),
 	'<circle id="outline" cx="{}" cy="{}" r="{}" stroke="{}" stroke-width="{}" fill="none"/>'.format(x, y, radius, colour, stroke),
-	'</g></svg>', sep='', end='')
+	'</g>',
+	'</svg>', sep='', end='')
