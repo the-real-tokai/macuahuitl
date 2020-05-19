@@ -9,6 +9,7 @@
 	$Id: comitl.py 78 2020-05-19 00:29:23Z tokai $
 """
 
+
 import math
 import random
 import argparse
@@ -66,7 +67,7 @@ if user_input.randomise:
 
 arcs = []
 
-for circle in range(circles):
+for _ in range(circles):
 	theta = chaos.uniform(0, 2) * math.pi + math.pi
 	t1    = -(chaos.uniform(0, 2) * math.pi + theta)
 	t2    = -(chaos.uniform(0, 2) * math.pi + theta)
