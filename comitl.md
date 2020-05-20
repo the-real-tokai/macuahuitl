@@ -15,7 +15,18 @@ currently no dependencies to any 3rd-party libraries or modules.
 
 ### Output Examples
 
-coming soon.
+![Figure 1](./Documentation/Comitl/Examples/basic_01.svg)
+![Figure 2](./Documentation/Comitl/Examples/basic_02.svg)
+![Figure 3](./Documentation/Comitl/Examples/basic_03.svg)
+![Figure 4](./Documentation/Comitl/Examples/basic_04.svg)
+![Figure 5](./Documentation/Comitl/Examples/basic_05.svg)
+![Figure 6](./Documentation/Comitl/Examples/basic_06.svg)
+![Figure 7](./Documentation/Comitl/Examples/basic_07.svg)
+![Figure 8](./Documentation/Comitl/Examples/basic_08.svg)
+![Figure 9](./Documentation/Comitl/Examples/basic_09.svg)
+![Figure 10](./Documentation/Comitl/Examples/basic_10.svg)
+![Figure 11](./Documentation/Comitl/Examples/basic_11.svg)
+![Figure 12](./Documentation/Comitl/Examples/basic_12.svg)
 
 ### Usage
 
