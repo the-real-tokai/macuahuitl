@@ -16,7 +16,7 @@ coming soon.
 
 ## Comitl
 
-Concentrically arranges randomly sized arcs into a pretty disc shape.
+Concentrically arranges randomly sized arcs into a pretty disc shape. Output is generated as a set of vector shapes in Scalable
+Vector Graphics (SVG) format and printed on the standard output stream.
 
-    Usage Example:
-    $ ./comitl.py --circles=21 --stroke-width=6 --gap=1 --colour=green >output.svg
+[Documentation](comitl.md)
