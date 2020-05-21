@@ -10,8 +10,12 @@ Vector Graphics (SVG) format and printed on the standard output stream.
 
 ### Requirements
 
-An installation of Python 3 (any version above 3.5 should do fine; older versions might work, but have not been tested.). There are
-currently no dependencies to any 3rd-party libraries or modules.
+An installation of `Python 3` (any version above v3.5 will do fine). For the optional `PNG` output support an installation of
+the `cairosvg` 3rd-party Python module is recommended. The module can be installed with Python's package manager:
+
+````
+pip --install cairosvg --user
+```
 
 ### Output Examples
 
@@ -33,8 +37,11 @@ currently no dependencies to any 3rd-party libraries or modules.
 ```
 usage: comitl.py [-V] [-h] [--circles INT] [--stroke-width FLOAT]
                  [--gap FLOAT] [--inner-radius FLOAT] [--hoffset FLOAT]
-                 [--voffset FLOAT] [--colour COLOUR] [--random-seed INT]
-                 [--randomise]
+                 [--voffset FLOAT] [--color COLOR] [--random-seed INT]
+                 [--randomize] [--separate-paths]
+                 [--outline-mode {both,outside,inside,none}]
+                 [--background-color COLOR] [--disc-color COLOR] [-o FILENAME]
+                 [--output-size INT]
 
 Startup:
   -V, --version         show version number and exit
@@ -48,23 +55,47 @@ Algorithm:
   --inner-radius FLOAT  setup inner disc radius to create an annular shape
   --hoffset FLOAT       shift the whole disc horizontally  [:0.0]
   --voffset FLOAT       shift the whole disc vertically  [:0.0]
-  --colour COLOUR       SVG compliant colour specification or identifier
+  --color COLOR         SVG compliant color specification or identifier
                          [:black]
-  --random-seed INT     fixed initialisation of the random number generator
+  --random-seed INT     fixed initialization of the random number generator
                         for predictable results
-  --randomise           generate truly random disc layouts; values provided
-                        via other commandline parameters are utilised as
-                        limits
+  --randomize           generate truly random disc layouts; other algorithm
+                        values provided via command line parameters are
+                        utilized as limits
+
+Miscellaneous:
+  --separate-paths      generate separate <path> elements for each arc
+  --outline-mode {both,outside,inside,none}
+                        generate bounding outline circles  [:both]
+  --background-color COLOR
+                        SVG compliant color specification or identifier; adds
+                        a background <rect> to the SVG output
+  --disc-color COLOR    SVG compliant color specification or identifier; fills
+                        the background of the generated disc by adding an
+                        extra <circle> element
+
+Output:
+  -o FILENAME, --output FILENAME
+                        optionally rasterize the generated vector paths and
+                        write the result into a PNG file (requires the
+                        `svgcairo' Python module)
+  --output-size INT     force pixel width and height of the raster image; if
+                        omitted the generated SVG viewbox dimensions are used
 ```
 
 #### Usage Examples
 ```
+# Generate a SVG file
 ./comitl.py --circles=10 --color=green > output.svg
+
+# Rasterize directly into a PNG file (requires "cairosvg")
+./comitl.py --circles=10 --disc-color=black --color=#fff -o output.png
 ```
 
 ```
 # Preview output with ImageMagick's "convert" and Preview.app (Mac OS X)
 ./comitl.py --randomise | convert svg:- png:- | open -f -a Preview.app
+
 # Preview output with ImageMagick's "convert" and "display" (Linux/BSD/etc.)
 ./comitl.py --randomise | convert svg:- png:- | display
 ````
@@ -73,12 +104,27 @@ Algorithm:
 
 <table>
     <tr>
+        <td valign=top>1.5</td>
+        <td valign=top nowrap>22-May-2020</td>
+        <td>
+			<ul>
+				<li>Added support for rasterized PNG output (using `cairosvg`)
+				<li>Added `--separate-paths` option
+				<li>Utilize Python's own xml module to generate the SVG data (not that this really improves the code in any way)
+				<li>Improved render aspects to avoid various stroke overlapping issues
+				<li>Added `--background-color` and `--disc-color` options
+				<li>Added `--outline-mode` option
+				<li>Constant ratio for the image border area
+			</ul>
+		</td>
+    </tr>
+    <tr>
         <td valign=top>1.4</td>
         <td valign=top nowrap>20-May-2020</td>
         <td>
 			<ul>
 				<li>Allow arc specification in degree
-				<li>Arcs are now initialised with angular offsets and ranges
+				<li>Arcs are now initialized with angular offsets and ranges
 				<li>Improved code reusability and scope separation
 			</ul>
 		</td>
@@ -89,7 +135,7 @@ Algorithm:
         <td>
 			<ul>
 				<li>Refactored in preparation for new features
-				<li>Optimisations
+				<li>Optimizations
 			</ul>
 		</td>
     </tr>
@@ -98,7 +144,7 @@ Algorithm:
         <td valign=top nowrap>18-May-2020</td>
         <td>
 			<ul>
-				<li>Utilise SVG groups in the generated output
+				<li>Utilize SVG groups in the generated output
 				<li>Added automatic identifiers to the SVG elements
 				<li>Updated help text
 			</ul>
