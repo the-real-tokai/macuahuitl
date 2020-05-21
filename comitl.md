@@ -13,7 +13,7 @@ Vector Graphics (SVG) format and printed on the standard output stream.
 An installation of `Python 3` (any version above v3.5 will do fine). For the optional `PNG` output support an installation of
 the `cairosvg` 3rd-party Python module is recommended. The module can be installed with Python's package manager:
 
-````
+```
 pip --install cairosvg --user
 ```
 
