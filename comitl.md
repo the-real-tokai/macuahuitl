@@ -13,16 +13,16 @@ Vector Graphics (SVG) format and printed on the standard output stream.
 An installation of `Python 3` (any version above v3.5 will do fine). For the optional `PNG` output support an installation of
 the `cairosvg` 3rd-party Python module is recommended. The module can be installed with Python's package manager:
 
-```
+``` shell
 pip --install cairosvg --user
 ```
 
 ### Output Examples
 
 ![Figure 1](./Documentation/Comitl/Examples/basic_01.svg)
-![Figure 2](./Documentation/Comitl/Examples/basic_02.svg)
+![Figure 2](./Documentation/Comitl/Examples/basic_04.svg)
 ![Figure 3](./Documentation/Comitl/Examples/basic_03.svg)
-![Figure 4](./Documentation/Comitl/Examples/basic_04.svg)
+![Figure 4](./Documentation/Comitl/Examples/basic_02.svg)
 ![Figure 5](./Documentation/Comitl/Examples/basic_05.svg)
 ![Figure 6](./Documentation/Comitl/Examples/basic_06.svg)
 ![Figure 7](./Documentation/Comitl/Examples/basic_07.svg)
@@ -40,8 +40,10 @@ usage: comitl.py [-V] [-h] [--circles INT] [--stroke-width FLOAT]
                  [--voffset FLOAT] [--color COLOR] [--random-seed INT]
                  [--randomize] [--separate-paths]
                  [--outline-mode {both,outside,inside,none}]
-                 [--background-color COLOR] [--disc-color COLOR] [-o FILENAME]
-                 [--output-size INT]
+                 [--background-color COLOR] [--disc-color COLOR]
+                 [--animation-mode {random,bidirectional,cascade-in,cascade-out}]
+                 [--animation-duration FLOAT] [--animation-offset FLOAT]
+                 [-o FILENAME] [--output-size INT]
 
 Startup:
   -V, --version         show version number and exit
@@ -80,7 +82,11 @@ Miscellaneous:
   --animation-duration FLOAT
                         defines base duration of one full 360° arc rotation
                         (in seconds); negative inputs switch to counter-
-                        clockwise base direction  [:6]
+                        clockwise base direction  [:6.0]
+  --animation-offset FLOAT
+                        offset the animation (in seconds) to support rendering
+                        to frame sequences for frame based animation formats.
+                         [:0]
 
 Output:
   -o FILENAME, --output FILENAME
@@ -92,7 +98,7 @@ Output:
 ```
 
 #### Usage Examples
-```
+``` shell
 # Generate a SVG file
 ./comitl.py --circles=10 --color=green > output.svg
 
@@ -100,7 +106,7 @@ Output:
 ./comitl.py --circles=10 --disc-color=black --color=#fff -o output.png
 ```
 
-```
+``` shell
 # Preview output with ImageMagick's "convert" and Preview.app (Mac OS X)
 ./comitl.py --randomise | convert svg:- png:- | open -f -a Preview.app
 
@@ -112,11 +118,11 @@ Creating frame-based animations (for use in VFX applications like BlackMagic Fus
 possible by utilizing the `--animation-offset` parameter to manually advance the SVG animation, f.ex. a quick bash script
 like this would create a 10s clip in `Apple ProRes 4444` format with the help of `ffmpeg`:
  
-```
+~~~ shell
 #!/bin/bash
 
 if mkdir -p './output_frames'; then
-	framerate=`bc -l <<< "scale=3; 30000/1001"`  # NTSC
+	framerate=`bc -l <<< "30000/1001"`  # NTSC
 	
 	for frame in {0..299}; do
 		offset=`bc -l <<< "${frame}/${framerate}"`
@@ -139,7 +145,7 @@ if mkdir -p './output_frames'; then
 		-c:v prores_ks -profile:v 4        \
 		"./output_frames/output.mov"
 fi
-```
+~~~
 
 ### History
 
