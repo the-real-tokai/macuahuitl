@@ -18,7 +18,7 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: comitl.py 95 2020-05-22 12:14:15Z tokai $
+	$Id: comitl.py 97 2020-05-22 18:32:37Z tokai $
 """
 
 import math
@@ -76,31 +76,32 @@ def main():
 	)
 
 	g = ap.add_argument_group('Startup')
-	g.add_argument('-V', '--version', action='version', version='%(prog)s {}'.format(__version__), help="show version number and exit")
-	g.add_argument('-h', '--help', action='help', help='show this help message and exit')
+	g.add_argument('-V', '--version',      action='version',               help="show version number and exit", version='%(prog)s {}'.format(__version__), )
+	g.add_argument('-h', '--help',         action='help',                  help='show this help message and exit')
 
 	g = ap.add_argument_group('Algorithm')
-	g.add_argument('--circles',          metavar='INT',      type=int,   help='number of concentric arc elements to generate inside the disc  [:21]', default=21)
-	g.add_argument('--stroke-width',     metavar='FLOAT',    type=float, help='width of the generated strokes  [:6]', default=6.0)
-	g.add_argument('--gap',              metavar='FLOAT',    type=float, help='distance between the generated strokes')
-	g.add_argument('--inner-radius',     metavar='FLOAT',    type=float, help='setup inner disc radius to create an annular shape')
-	g.add_argument('--hoffset',          metavar='FLOAT',    type=float, help='shift the whole disc horizontally  [:0.0]', default=0.0)
-	g.add_argument('--voffset',          metavar='FLOAT',    type=float, help='shift the whole disc vertically  [:0.0]', default=0.0)
-	g.add_argument('--color',            metavar='COLOR',    type=str,   help='SVG compliant color specification or identifier  [:black]', default='black')
-	g.add_argument('--random-seed',      metavar='INT',      type=int,   help='fixed initialization of the random number generator for predictable results')
-	g.add_argument('--randomize',        action='store_true',            help='generate truly random disc layouts; other algorithm values provided via command line parameters are utilized as limits')
+	g.add_argument('--circles',            metavar='INT',      type=int,   help='number of concentric arc elements to generate inside the disc  [:21]', default=21)
+	g.add_argument('--stroke-width',       metavar='FLOAT',    type=float, help='width of the generated strokes  [:6]', default=6.0)
+	g.add_argument('--gap',                metavar='FLOAT',    type=float, help='distance between the generated strokes')
+	g.add_argument('--inner-radius',       metavar='FLOAT',    type=float, help='setup inner disc radius to create an annular shape')
+	g.add_argument('--hoffset',            metavar='FLOAT',    type=float, help='shift the whole disc horizontally  [:0.0]', default=0.0)
+	g.add_argument('--voffset',            metavar='FLOAT',    type=float, help='shift the whole disc vertically  [:0.0]', default=0.0)
+	g.add_argument('--color',              metavar='COLOR',    type=str,   help='SVG compliant color specification or identifier  [:black]', default='black')
+	g.add_argument('--random-seed',        metavar='INT',      type=int,   help='fixed initialization of the random number generator for predictable results')
+	g.add_argument('--randomize',          action='store_true',            help='generate truly random disc layouts; other algorithm values provided via command line parameters are utilized as limits')
 
 	g = ap.add_argument_group('Miscellaneous')
-	g.add_argument('--separate-paths',   action='store_true',            help='generate separate <path> elements for each arc; automatically implied when animation support is enabled')
-	g.add_argument('--outline-mode',     choices=['both', 'outside', 'inside', 'none'], help='generate bounding outline circles  [:both]', default='both')
-	g.add_argument('--background-color', metavar='COLOR',    type=str,   help='SVG compliant color specification or identifier; adds a background <rect> to the SVG output')
-	g.add_argument('--disc-color',       metavar='COLOR',    type=str,   help='SVG compliant color specification or identifier; fills the background of the generated disc by adding an extra <circle> element')
-	g.add_argument('--animation-mode',   choices=['random', 'bidirectional', 'cascade-in', 'cascade-out'], help='enables SVG <animateTransform> support',)
-	g.add_argument('--animation-duration', metavar='FLOAT',  type=float, help='defines base duration of one full 360° arc rotation (in seconds); negative inputs switch to counter-clockwise base direction  [:6]', default=6.0)
+	g.add_argument('--separate-paths',     action='store_true',            help='generate separate <path> elements for each arc; automatically implied when animation support is enabled')
+	g.add_argument('--outline-mode',                                       help='generate bounding outline circles  [:both]', choices=['both', 'outside', 'inside', 'none'], default='both')
+	g.add_argument('--background-color',   metavar='COLOR',    type=str,   help='SVG compliant color specification or identifier; adds a background <rect> to the SVG output')
+	g.add_argument('--disc-color',         metavar='COLOR',    type=str,   help='SVG compliant color specification or identifier; fills the background of the generated disc by adding an extra <circle> element')
+	g.add_argument('--animation-mode',                                     help='enables SVG <animateTransform> support', choices=['random', 'bidirectional', 'cascade-in', 'cascade-out'])
+	g.add_argument('--animation-duration', metavar='FLOAT',    type=float, help='defines base duration of one full 360° arc rotation (in seconds); negative inputs switch to counter-clockwise base direction  [:6.0]', default=6.0)
+	g.add_argument('--animation-offset',   metavar='FLOAT',    type=float, help='offset the animation (in seconds) to support rendering to frame sequences for frame based animation formats.  [:0]', default=0.0)
 
 	g = ap.add_argument_group('Output')
-	g.add_argument('-o', '--output',     metavar='FILENAME', type=str,   help='optionally rasterize the generated vector paths and write the result into a PNG file (requires the `svgcairo\' Python module)')
-	g.add_argument('--output-size',      metavar='INT',      type=int,   help='force pixel width and height of the raster image; if omitted the generated SVG viewbox dimensions are used')
+	g.add_argument('-o', '--output',       metavar='FILENAME', type=str,   help='optionally rasterize the generated vector paths and write the result into a PNG file (requires the `svgcairo\' Python module)')
+	g.add_argument('--output-size',        metavar='INT',      type=int,   help='force pixel width and height of the raster image; if omitted the generated SVG viewbox dimensions are used')
 
 	user_input = ap.parse_args()
 
@@ -184,7 +185,9 @@ def main():
 		if user_input.separate_paths or user_input.animation_mode:
 			svg_ga = xtree.SubElement(svg_m, 'g', {'id':'arcs'})
 			for aid, a in enumerate(arcs):
-				svg_arc = xtree.SubElement(svg_ga, 'path', {'id':'arc-{}'.format(aid+1), 'd':str(a), 'stroke-linecap':'round', **config})
+
+				svg_arc = xtree.SubElement(svg_ga, 'path', {'id':'arc-{}'.format(aid+1), 'stroke-linecap':'round', **config})
+				shift = 0.0
 
 				if user_input.animation_mode:
 					if user_input.animation_mode == 'cascade-out':
@@ -199,6 +202,8 @@ def main():
 						if (user_input.animation_mode == 'bidirectional') and (random.random() < 0.5):
 							d *= -1  # switch direction randomly
 
+					shift = (360.0 / d) * user_input.animation_offset
+
 					xtree.SubElement(svg_arc, 'animateTransform', {
 						'attributeName': 'transform',
 						'type':          'rotate',
@@ -207,6 +212,9 @@ def main():
 						'dur':           '{}s'.format(abs(d)),
 						'repeatCount':   'indefinite'
 					})
+
+				a.offset += shift
+				svg_arc.set('d', str(a))
 		else:
 			xtree.SubElement(svg_m, 'path', {'id':'arcs', 'd':''.join(map(str, arcs)), 'stroke-linecap':'round', **config})
 

@@ -106,7 +106,40 @@ Output:
 
 # Preview output with ImageMagick's "convert" and "display" (Linux/BSD/etc.)
 ./comitl.py --randomise | convert svg:- png:- | display
-````
+```
+
+Creating frame-based animations (for use in VFX applications like BlackMagic Fusion, After Effects, etc.) is
+possible by utilizing the `--animation-offset` parameter to manually advance the SVG animation, f.ex. a quick bash script
+like this would create a 10s clip in `Apple ProRes 4444` format with the help of `ffmpeg`:
+ 
+```
+#!/bin/bash
+
+if mkdir -p './output_frames'; then
+	framerate=`bc -l <<< "scale=3; 30000/1001"`  # NTSC
+	
+	for frame in {0..299}; do
+		offset=`bc -l <<< "${frame}/${framerate}"`
+		filename=`printf 'frame%04d.png' ${frame}`
+	
+		./comitl.py \
+			--random-seed=12345              \
+			--animation-mode=random          \
+			--animation-offset="${offset}"   \
+			--color=#334455                  \
+			--background-color=#ddeeff       \
+			--output-size=480                \
+			-o "./output_frames/${filename}"
+	done
+	
+	ffmpeg \
+		-f image2                          \
+		-framerate "${framerate}"          \
+		-i "./output_frames/frame%04d.png" \
+		-c:v prores_ks -profile:v 4        \
+		"./output_frames/output.mov"
+fi
+```
 
 ### History
 
@@ -116,7 +149,7 @@ Output:
         <td valign=top nowrap>22-May-2020</td>
         <td>
 			<ul>
-				<li>Added support for SVG animations with 4 different modes (`--animation-mode` and `--animation-duration` options)
+				<li>Added support for SVG animations with 4 different modes (`--animation-mode`, `--animation-duration`, and `--animation-offset` options)
 			</ul>
 		</td>
     </tr>
