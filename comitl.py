@@ -18,7 +18,7 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: comitl.py 92 2020-05-21 21:15:18Z tokai $
+	$Id: comitl.py 95 2020-05-22 12:14:15Z tokai $
 """
 
 import math
@@ -30,7 +30,7 @@ import xml.etree.ElementTree as xtree
 
 
 __author__  = 'Christian Rosentreter'
-__version__ = '1.5'
+__version__ = '1.6'
 __all__     = ['SVGArcPathSegment']
 
 
@@ -91,10 +91,12 @@ def main():
 	g.add_argument('--randomize',        action='store_true',            help='generate truly random disc layouts; other algorithm values provided via command line parameters are utilized as limits')
 
 	g = ap.add_argument_group('Miscellaneous')
-	g.add_argument('--separate-paths',   action='store_true',            help='generate separate <path> elements for each arc')
+	g.add_argument('--separate-paths',   action='store_true',            help='generate separate <path> elements for each arc; automatically implied when animation support is enabled')
 	g.add_argument('--outline-mode',     choices=['both', 'outside', 'inside', 'none'], help='generate bounding outline circles  [:both]', default='both')
 	g.add_argument('--background-color', metavar='COLOR',    type=str,   help='SVG compliant color specification or identifier; adds a background <rect> to the SVG output')
 	g.add_argument('--disc-color',       metavar='COLOR',    type=str,   help='SVG compliant color specification or identifier; fills the background of the generated disc by adding an extra <circle> element')
+	g.add_argument('--animation-mode',   choices=['random', 'bidirectional', 'cascade-in', 'cascade-out'], help='enables SVG <animateTransform> support',)
+	g.add_argument('--animation-duration', metavar='FLOAT',  type=float, help='defines base duration of one full 360° arc rotation (in seconds); negative inputs switch to counter-clockwise base direction  [:6]', default=6.0)
 
 	g = ap.add_argument_group('Output')
 	g.add_argument('-o', '--output',     metavar='FILENAME', type=str,   help='optionally rasterize the generated vector paths and write the result into a PNG file (requires the `svgcairo\' Python module)')
@@ -167,6 +169,9 @@ def main():
 
 	svg = xtree.Element('svg', {'width':'100%', 'height':'100%', 'xmlns':'http://www.w3.org/2000/svg', 'viewBox':'{o} {o} {s} {s}'.format(o=vb_off, s=vb_dim)})
 
+	title = xtree.SubElement(svg, 'title')
+	title.text = 'A Comitl Artwork'
+
 	if user_input.background_color:
 		xtree.SubElement(svg, 'rect', {'id':'background', 'x':vb_off, 'y':vb_off, 'width':vb_dim, 'height':vb_dim, 'fill':user_input.background_color})
 
@@ -176,10 +181,32 @@ def main():
 		xtree.SubElement(svg_m, 'circle', {'id':'disc-background', 'cx':_f(x), 'cy':_f(y), 'r':_f(radius), 'fill':user_input.disc_color})
 
 	if arcs:
-		if user_input.separate_paths:
+		if user_input.separate_paths or user_input.animation_mode:
 			svg_ga = xtree.SubElement(svg_m, 'g', {'id':'arcs'})
 			for aid, a in enumerate(arcs):
-				xtree.SubElement(svg_ga, 'path', {'id':'arc-{}'.format(aid+1), 'd':str(a), 'stroke-linecap':'round', **config})
+				svg_arc = xtree.SubElement(svg_ga, 'path', {'id':'arc-{}'.format(aid+1), 'd':str(a), 'stroke-linecap':'round', **config})
+
+				if user_input.animation_mode:
+					if user_input.animation_mode == 'cascade-out':
+						d = user_input.animation_duration * ((aid+1) * 0.25)  # TODO: 1/4 decay value could be configurable
+					elif user_input.animation_mode == 'cascade-in':
+						d = user_input.animation_duration * ((len(arcs)-aid+1) * 0.25)
+					else:
+						# limits duration range into a 50% variation window to avoid super fast arcs with values closer to 0
+						d = chaos.uniform(abs(user_input.animation_duration) * 0.5, abs(user_input.animation_duration))  # TODO: variation could be configurable
+						if user_input.animation_duration < 0:
+							d *= -1  # restore user direction
+						if (user_input.animation_mode == 'bidirectional') and (random.random() < 0.5):
+							d *= -1  # switch direction randomly
+
+					xtree.SubElement(svg_arc, 'animateTransform', {
+						'attributeName': 'transform',
+						'type':          'rotate',
+						'from':          '{} {} {}'.format(360 if d < 0 else   0, x, y),
+						'to':            '{} {} {}'.format(  0 if d < 0 else 360, x, y),
+						'dur':           '{}s'.format(abs(d)),
+						'repeatCount':   'indefinite'
+					})
 		else:
 			xtree.SubElement(svg_m, 'path', {'id':'arcs', 'd':''.join(map(str, arcs)), 'stroke-linecap':'round', **config})
 
@@ -187,6 +214,8 @@ def main():
 		svg_go = xtree.SubElement(svg_m, 'g', {'id':'outlines'})
 		for oid, o in enumerate(outlines):
 			xtree.SubElement(svg_go, 'circle', {'id':'outline-{}'.format(oid+1), 'cx':_f(o['x']), 'cy':_f(o['y']), 'r':_f(o['r']), **config})
+
+	svg.append(xtree.Comment(' Generator: comitl.py {} (https://github.com/the-real-tokai/macuahuitl) '.format(__version__)))
 
 	rawxml = xtree.tostring(svg, encoding='unicode')
 

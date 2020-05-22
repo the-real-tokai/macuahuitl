@@ -1,1 +1,29 @@
-<svg height="180" viewBox="-198.79 -198.79 397.58 397.58" width="180" xmlns="http://www.w3.org/2000/svg"><g id="comitl-disc"><path d="M 11.801817202 -7.048939217 A 13.746651715 13.746651715 0 0 1 7.12165834 11.758078749M -21.7752409 -4.67034418 A 22.270456462 22.270456462 0 0 1 22.201250948 1.754333883M -27.957620858 -12.909607251 A 30.794261209 30.794261209 0 1 1 -14.318763054 27.262786872M 39.267861431 -1.986295347 A 39.318065957 39.318065957 0 0 1 -10.822176136 37.799349389M 47.396569042 -6.512283432 A 47.841870704 47.841870704 0 0 1 -46.790955866 9.972514308M 53.52991215 -17.65326809 A 56.365675451 56.365675451 0 1 1 51.260100285 -23.441234777M -56.739252456 31.484946738 A 64.889480198 64.889480198 0 0 1 49.403040305 -42.071180742M -10.413679567 -72.670941128 A 73.413284946 73.413284946 0 0 1 28.588950932 67.617913981M 78.396348199 23.82644028 A 81.937089693 81.937089693 0 0 1 -8.102429546 81.535497195M -34.162826003 83.762012526 A 90.46089444 90.46089444 0 0 1 -86.606167292 -26.125566211M -70.017189619 -69.968305904 A 98.984699187 98.984699187 0 1 1 -95.70061731 -25.285618833M -43.178314065 98.456648393 A 107.508503935 107.508503935 0 1 1 30.656029487 103.045069141M -112.792846311 -27.226282873 A 116.032308682 116.032308682 0 0 1 -103.142015064 -53.152811653M -111.55621067 -55.402502232 A 124.556113429 124.556113429 0 0 1 -48.605076728 -114.681175041M 43.331600031 125.827807184 A 133.079918176 133.079918176 0 0 1 8.244384983 132.824300254M 67.2267551 124.628157912 A 141.603722924 141.603722924 0 0 1 15.87056796 140.711546855M 81.69495461 -125.953201452 A 150.127527671 150.127527671 0 0 1 73.385404427 130.96891609M -51.813553412 -149.951995521 A 158.651332418 158.651332418 0 1 1 -89.847954447 -130.757754492" fill="none" id="arcs" stroke="#3d565e" stroke-linecap="round" stroke-width="5.222846968" /><g id="outlines"><circle cx="0.0" cy="0.0" fill="none" id="outline-1" r="5.222846968" stroke="#3d565e" stroke-width="5.222846968" /><circle cx="0.0" cy="0.0" fill="none" id="outline-2" r="167.175137165" stroke="#3d565e" stroke-width="5.222846968" /></g></g></svg>
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" height="180" viewBox="-108.89 -108.89 217.77 217.77" width="180">
+	<g id="comitl-disc">
+		<g id="arcs">
+			<path d="M 9.291239009 -15.41664288 A 18.0 18.0 0 0 1 10.415945893 -14.680193158" fill="none" id="arc-1" stroke="#3d565e" stroke-linecap="round" stroke-width="6.0">
+				<animateTransform attributeName="transform" dur="1.0s" from="0 0.0 0.0" repeatCount="indefinite" to="360 0.0 0.0" type="rotate"/>
+			</path>
+			<path d="M -22.124421475 20.261045737 A 30.0 30.0 0 1 1 6.132243799 29.366572595" fill="none" id="arc-2" stroke="#3d565e" stroke-linecap="round" stroke-width="6.0">
+				<animateTransform attributeName="transform" dur="2.0s" from="0 0.0 0.0" repeatCount="indefinite" to="360 0.0 0.0" type="rotate"/>
+			</path>
+			<path d="M 41.964629304 1.723336125 A 42.0 42.0 0 0 1 -11.672267745 40.345485072" fill="none" id="arc-3" stroke="#3d565e" stroke-linecap="round" stroke-width="6.0">
+				<animateTransform attributeName="transform" dur="3.0s" from="0 0.0 0.0" repeatCount="indefinite" to="360 0.0 0.0" type="rotate"/>
+			</path>
+			<path d="M 32.183821332 43.361292006 A 54.0 54.0 0 1 1 -25.539120921 -47.578916576" fill="none" id="arc-4" stroke="#3d565e" stroke-linecap="round" stroke-width="6.0">
+				<animateTransform attributeName="transform" dur="4.0s" from="0 0.0 0.0" repeatCount="indefinite" to="360 0.0 0.0" type="rotate"/>
+			</path>
+			<path d="M 10.583797394 -65.145861209 A 66.0 66.0 0 1 1 -6.051795796 -65.721958033" fill="none" id="arc-5" stroke="#3d565e" stroke-linecap="round" stroke-width="6.0">
+				<animateTransform attributeName="transform" dur="5.0s" from="0 0.0 0.0" repeatCount="indefinite" to="360 0.0 0.0" type="rotate"/>
+			</path>
+			<path d="M 77.941554093 -3.018964314 A 78.0 78.0 0 0 1 60.396610803 49.358377238" fill="none" id="arc-6" stroke="#3d565e" stroke-linecap="round" stroke-width="6.0">
+				<animateTransform attributeName="transform" dur="6.0s" from="0 0.0 0.0" repeatCount="indefinite" to="360 0.0 0.0" type="rotate"/>
+			</path>
+		</g>
+		<g id="outlines">
+			<circle cx="0.0" cy="0.0" fill="none" id="outline-1" r="6.0" stroke="#3d565e" stroke-width="6.0"/>
+			<circle cx="0.0" cy="0.0" fill="none" id="outline-2" r="90.0" stroke="#3d565e" stroke-width="6.0"/>
+		</g>
+	</g>
+</svg>

@@ -64,7 +64,9 @@ Algorithm:
                         utilized as limits
 
 Miscellaneous:
-  --separate-paths      generate separate <path> elements for each arc
+  --separate-paths      generate separate <path> elements for each arc;
+                        automatically implied when animation support is
+                        enabled
   --outline-mode {both,outside,inside,none}
                         generate bounding outline circles  [:both]
   --background-color COLOR
@@ -73,6 +75,12 @@ Miscellaneous:
   --disc-color COLOR    SVG compliant color specification or identifier; fills
                         the background of the generated disc by adding an
                         extra <circle> element
+  --animation-mode {random,bidirectional,cascade-in,cascade-out}
+                        enables SVG <animateTransform> support
+  --animation-duration FLOAT
+                        defines base duration of one full 360° arc rotation
+                        (in seconds); negative inputs switch to counter-
+                        clockwise base direction  [:6]
 
 Output:
   -o FILENAME, --output FILENAME
@@ -103,6 +111,15 @@ Output:
 ### History
 
 <table>
+    <tr>
+        <td valign=top>1.6</td>
+        <td valign=top nowrap>22-May-2020</td>
+        <td>
+			<ul>
+				<li>Added support for SVG animations with 4 different modes (`--animation-mode` and `--animation-duration` options)
+			</ul>
+		</td>
+    </tr>
     <tr>
         <td valign=top>1.5</td>
         <td valign=top nowrap>22-May-2020</td>
