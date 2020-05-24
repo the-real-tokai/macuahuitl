@@ -2,7 +2,7 @@
 
 [![GitHub](https://img.shields.io/github/license/the-real-tokai/macuahuitl?color=green&label=License&style=flat)](https://github.com/the-real-tokai/macuahuitl/blob/master/LICENSE)
 [![GitHub Code Size in Bytes](https://img.shields.io/github/languages/code-size/the-real-tokai/macuahuitl?label=Code%20Size&style=flat)](https://github.com/the-real-tokai/macuahuitl/)
-[![IRC](https://img.shields.io/badge/IRC-irc.freenode.net%20%23macuahuitl-orange&style=flat)](irc://irc.freenode.net/#binaryriot)
+[![IRC](https://img.shields.io/badge/IRC-irc.freenode.net%20%23macuahuitl-orange&style=flat)](https://webchat.freenode.net/#macuahuitl)
 [![Twitter Follow](https://img.shields.io/twitter/follow/binaryriot?color=blue&label=Follow%20%40binaryriot&style=flat)](https://twitter.com/binaryriot)
 
 ## Synopsis
@@ -19,7 +19,9 @@ graphics application like `InkScape`, `Affinity Designer`, `Adobe Illustrator`, 
 output a custom `JSON`-based format of particle or shape descriptions which then can be further processed by related scripts or
 imported into 3D graphic software packages like `Blender` or `CINEMA 4D` for rendering.
 
-## Comitl
+## Overview
+
+### Comitl
 
 <img width="90" height="90" src="Documentation/Comitl/Examples/basic_01.svg" alt="Figure 1 - Comitl Example"> <img width="90" height="90" src="Documentation/Comitl/Examples/basic_04.svg" alt="Figure 2 - Comitl Example"> <img width="90" height="90" src="Documentation/Comitl/Examples/basic_06.svg" alt="Figure 3 - Comitl Example"> <img width="90" height="90" src="Documentation/Comitl/Examples/basic_08.svg" alt="Figure 4 - Comitl Example"> <img width="90" height="90" src="Documentation/Comitl/Examples/basic_02.svg" alt="Figure 5 - Comitl Example">
 
@@ -29,14 +31,21 @@ Vector Graphics (SVG) format and printed on the standard output stream. Comitl a
 [Direct Download](https://raw.githubusercontent.com/the-real-tokai/macuahuitl/master/comitl.py) | [Documentation](comitl.md)
 
 
-## Atlatl
+### Atlatl
 
 coming soon.
 
-## Xonacatl
+### Xonacatl
 
 coming soon.
 
-## Acahualli
+### Acahualli
 
 coming soon.
+
+## Copyright and License
+
+© 2019-2020 Christian Rosentreter
+(https://www.binaryriot.org/)
+
+All scripts are free software: you can redistribute them and/or modify them under the terms of the [GNU Affero General Public License](LICENSE) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
