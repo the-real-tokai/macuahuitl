@@ -1,6 +1,9 @@
 # The "Macuahuitl" Generative Art Toolbox
 
-![GitHub](https://img.shields.io/github/license/the-real-tokai/macuahuitl?color=green&label=License&style=flat) ![GitHub Code Size in Bytes](https://img.shields.io/github/languages/code-size/the-real-tokai/macuahuitl?label=Code%20Size&style=flat) ![IRC](https://img.shields.io/badge/IRC-irc.freenode.net%20%23macuahuitl-orange&style=flat) ![Twitter Follow](https://img.shields.io/twitter/follow/binaryriot?color=blue&label=Follow%20%40binaryriot&style=flat)
+[![GitHub](https://img.shields.io/github/license/the-real-tokai/macuahuitl?color=green&label=License&style=flat)](https://github.com/the-real-tokai/macuahuitl/blob/master/LICENSE)
+[![GitHub Code Size in Bytes](https://img.shields.io/github/languages/code-size/the-real-tokai/macuahuitl?label=Code%20Size&style=flat)](https://github.com/the-real-tokai/macuahuitl/)
+[![IRC](https://img.shields.io/badge/IRC-irc.freenode.net%20%23macuahuitl-orange&style=flat)](irc://irc.freenode.net/#binaryriot)
+[![Twitter Follow](https://img.shields.io/twitter/follow/binaryriot?color=blue&label=Follow%20%40binaryriot&style=flat)](https://twitter.com/binaryriot)
 
 ## Synopsis
 
