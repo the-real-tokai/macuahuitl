@@ -3,12 +3,12 @@
 
 `comitl` *noun* — Classical Nahuatl: [1] cooking pot, pan — a rounded or cylindrical container used to heat up meals over a fire.
 
-### Synopsis
+## Synopsis
 
 Concentrically arranges randomly sized arcs into a pretty disc shape. Output is generated as a set of vector shapes in Scalable
 Vector Graphics (SVG) format and printed on the standard output stream.
 
-### Requirements
+## Requirements
 
 An installation of `Python 3` (any version above v3.5 will do fine). For the optional `PNG` output support an installation of
 the `cairosvg` 3rd-party Python module is recommended. The module can be installed with Python's package manager:
@@ -17,22 +17,11 @@ the `cairosvg` 3rd-party Python module is recommended. The module can be install
 pip --install cairosvg --user
 ```
 
-### Output Examples
+## Output Examples
 
-![Figure 1](./Documentation/Comitl/Examples/basic_01.svg)
-![Figure 2](./Documentation/Comitl/Examples/basic_04.svg)
-![Figure 3](./Documentation/Comitl/Examples/basic_03.svg)
-![Figure 4](./Documentation/Comitl/Examples/basic_02.svg)
-![Figure 5](./Documentation/Comitl/Examples/basic_05.svg)
-![Figure 6](./Documentation/Comitl/Examples/basic_06.svg)
-![Figure 7](./Documentation/Comitl/Examples/basic_07.svg)
-![Figure 8](./Documentation/Comitl/Examples/basic_08.svg)
-![Figure 9](./Documentation/Comitl/Examples/basic_09.svg)
-![Figure 10](./Documentation/Comitl/Examples/basic_10.svg)
-![Figure 11](./Documentation/Comitl/Examples/basic_11.svg)
-![Figure 12](./Documentation/Comitl/Examples/basic_12.svg)
+<img width="180" height="180" src="Documentation/Comitl/Examples/basic_01.svg" alt="Figure 1"> <img width="180" height="180" src="Documentation/Comitl/Examples/basic_04.svg" alt="Figure 2"> <img width="180" height="180" src="Documentation/Comitl/Examples/basic_03.svg" alt="Figure 3"> <img width="180" height="180" src="Documentation/Comitl/Examples/basic_02.svg" alt="Figure 4"> <img width="180" height="180" src="Documentation/Comitl/Examples/basic_05.svg" alt="Figure 5"> <img width="180" height="180" src="Documentation/Comitl/Examples/basic_06.svg" alt="Figure 6"> <img width="180" height="180" src="Documentation/Comitl/Examples/basic_07.svg" alt="Figure 7"> <img width="180" height="180" src="Documentation/Comitl/Examples/basic_08.svg" alt="Figure 8"> <img width="180" height="180" src="Documentation/Comitl/Examples/basic_09.svg" alt="Figure 9"> <img width="180" height="180" src="Documentation/Comitl/Examples/basic_10.svg" alt="Figure 10"> <img width="180" height="180" src="Documentation/Comitl/Examples/basic_11.svg" alt="Figure 11"> <img width="180" height="180" src="Documentation/Comitl/Examples/basic_12.svg" alt="Figure 12">
 
-### Usage
+## Usage
 
 ```
 usage: comitl.py [-V] [-h] [--circles INT] [--stroke-width FLOAT]
@@ -97,13 +86,13 @@ Output:
                         omitted the generated SVG viewbox dimensions are used
 ```
 
-#### Usage Examples
+### Usage Examples
 ``` shell
 # Generate a SVG file
 ./comitl.py --circles=10 --color=green > output.svg
 
 # Rasterize directly into a PNG file (requires "cairosvg")
-./comitl.py --circles=10 --disc-color=black --color=#fff -o output.png
+./comitl.py --circles=10 --disc-color=black --color="#fff" -o output.png
 ```
 
 ``` shell
@@ -147,7 +136,7 @@ if mkdir -p './output_frames'; then
 fi
 ~~~
 
-### History
+## History
 
 <table>
     <tr>
@@ -209,6 +198,6 @@ fi
     <tr>
         <td valign=top>1.1</td>
         <td valign=top nowrap>18-May-2020</td>
-        <td>Initial public release</td>
+        <td>Initial public source code release</td>
     </tr>
 </table>
