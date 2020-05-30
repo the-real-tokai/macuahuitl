@@ -18,7 +18,7 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: comitl.py 97 2020-05-22 18:32:37Z tokai $
+	$Id: comitl.py 122 2020-05-30 03:40:01Z tokai $
 """
 
 import math
@@ -30,7 +30,7 @@ import xml.etree.ElementTree as xtree
 
 
 __author__  = 'Christian Rosentreter'
-__version__ = '1.6'
+__version__ = '1.7'
 __all__     = ['SVGArcPathSegment']
 
 
@@ -39,8 +39,6 @@ class SVGArcPathSegment():
 	"""An 'arc' SVG path segment."""
 
 	def __init__(self, offset=0.0, angle=90.0, radius=1.0, x=0.0, y=0.0):
-		if abs(angle) >= 360:
-			raise ValueError('angles of SVG arc path segments must be smaller than 360°')
 		self.offset = offset
 		self.angle  = angle
 		self.radius = radius
@@ -51,14 +49,28 @@ class SVGArcPathSegment():
 		if self.angle == 0:
 			return ''
 
-		ts = (self.offset - 180.0) * math.pi / -180.0
-		td = (self.offset + self.angle - 180.0) * math.pi / -180.0
+		if abs(self.angle) < 360:
+			path_format = (
+				'M {sx} {sy} '
+				'A {rd} {rd} 0 {fl} 1 {dx} {dy}'
+			)
+			ts = (self.offset - 180.0) * math.pi / -180.0
+			td = (self.offset + self.angle - 180.0) * math.pi / -180.0
+		else:
+			path_format = (
+				'M {sx} {sy} '
+				'A {rd} {rd} 0 0 1 {dx} {dy} '  # essentially a circle formed by…
+				'A {rd} {rd} 0 1 1 {sx} {sy} '  # … two 180° arcs
+				'Z'
+			)
+			ts = 0
+			td = math.pi
 
-		return 'M {sx} {sy} A {r} {r} 0 {f} 1 {dx} {dy}'.format(
+		return path_format.format(
 			sx=round(self.x + self.radius * math.sin(ts), 9),
 			sy=round(self.y + self.radius * math.cos(ts), 9),
-			r=round(self.radius, 9),
-			f=int(abs(ts - td) > math.pi),
+			rd=round(self.radius, 9),
+			fl=int(abs(ts - td) > math.pi),
 			dx=round(self.x + self.radius * math.sin(td), 9),
 			dy=round(self.y + self.radius * math.cos(td), 9)
 		)
@@ -199,7 +211,7 @@ def main():
 						d = chaos.uniform(abs(user_input.animation_duration) * 0.5, abs(user_input.animation_duration))  # TODO: variation could be configurable
 						if user_input.animation_duration < 0:
 							d *= -1  # restore user direction
-						if (user_input.animation_mode == 'bidirectional') and (random.random() < 0.5):
+						if (user_input.animation_mode == 'bidirectional') and (chaos.random() < 0.5):
 							d *= -1  # switch direction randomly
 
 					shift = (360.0 / d) * user_input.animation_offset

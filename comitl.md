@@ -140,6 +140,16 @@ fi
 
 <table>
     <tr>
+        <td valign=top>1.7</td>
+        <td valign=top nowrap>30-May-2020</td>
+        <td>
+			<ul>
+				<li>Fixed: random seeds passed via `--random-seed` parameter were ignored for the two random animation modes
+				<li>The `SVGArcPathSegment` class now can handle arcs larger than 360° (not used by Comitl though)
+			</ul>
+		</td>
+    </tr>
+    <tr>
         <td valign=top>1.6</td>
         <td valign=top nowrap>22-May-2020</td>
         <td>
