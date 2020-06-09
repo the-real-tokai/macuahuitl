@@ -40,6 +40,15 @@ Vector Graphics (SVG) format and printed on the standard output stream. Comitl a
 
 [Direct Download](https://raw.githubusercontent.com/the-real-tokai/macuahuitl/master/comitl.py) | [Documentation](comitl.md)
 
+### Altepetl
+
+<img width="90" height="90" src="Documentation/Comitl/Examples/basic_01.svg" alt="Figure 1 - Altepetl Example"> <img width="90" height="90" src="Documentation/Comitl/Examples/basic_02.svg" alt="Figure 2 - Altepetl Example"> <img width="90" height="90" src="Documentation/Comitl/Examples/basic_03.svg" alt="Figure 3 - Altepetl Example"> <img width="90" height="90" src="Documentation/Comitl/Examples/basic_04.svg" alt="Figure 4 - Altepetl Example">
+
+Altepetl implements an artful grid-based layout of "U"-shapes; inspired by some of generative art pioneer [Véra Molnar](http://www.veramolnar.com)'s
+artworks. Output is generated as a set of vector shapes in Scalable Vector Graphics (SVG) format and printed on the standard output stream. Altepetl
+also supports optional PNG output (with `cairosvg`), and has a handful of parameters for configuration of the generated artwork.
+
+[Direct Download](https://raw.githubusercontent.com/the-real-tokai/macuahuitl/master/altepetl.py) | [Documentation](altepetl.md)
 
 ### Atlatl
 
