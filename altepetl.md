@@ -18,8 +18,8 @@ pip --install cairosvg --user
 
 ## Output Examples
 
-<img width="220" height="220" src="Documentation/Comitl/Examples/basic_01.svg" alt="Figure 1"> <img width="220" height="220" src="Documentation/Comitl/Examples/basic_02.svg" alt="Figure 2">
-<img width="220" height="220" src="Documentation/Comitl/Examples/basic_03.svg" alt="Figure 3"> <img width="220" height="220" src="Documentation/Comitl/Examples/basic_04.svg" alt="Figure 4">
+<img width="220" height="220" src="Documentation/Altepetl/Examples/basic_01.svg" alt="Figure 1"> <img width="220" height="220" src="Documentation/Altepetl/Examples/basic_02.svg" alt="Figure 2">
+<img width="220" height="220" src="Documentation/Altepetl/Examples/basic_04.svg" alt="Figure 3"> <img width="220" height="220" src="Documentation/Altepetl/Examples/basic_03.svg" alt="Figure 4">
 
 ## Usage
 
