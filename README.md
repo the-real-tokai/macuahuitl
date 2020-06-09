@@ -42,7 +42,7 @@ Vector Graphics (SVG) format and printed on the standard output stream. Comitl a
 
 ### Altepetl
 
-<img width="90" height="90" src="Documentation/Comitl/Examples/basic_01.svg" alt="Figure 1 - Altepetl Example"> <img width="90" height="90" src="Documentation/Comitl/Examples/basic_02.svg" alt="Figure 2 - Altepetl Example"> <img width="90" height="90" src="Documentation/Comitl/Examples/basic_03.svg" alt="Figure 3 - Altepetl Example"> <img width="90" height="90" src="Documentation/Comitl/Examples/basic_04.svg" alt="Figure 4 - Altepetl Example">
+<img width="90" height="90" src="Documentation/Altepetl/Examples/basic_01.svg" alt="Figure 1 - Altepetl Example"> <img width="90" height="90" src="Documentation/Altepetl/Examples/basic_02.svg" alt="Figure 2 - Altepetl Example"> <img width="90" height="90" src="Documentation/Altepetl/Examples/basic_03.svg" alt="Figure 3 - Altepetl Example"> <img width="90" height="90" src="Documentation/Altepetl/Examples/basic_04.svg" alt="Figure 4 - Altepetl Example">
 
 Altepetl implements an artful grid-based layout of "U"-shapes; inspired by some of generative art pioneer [Véra Molnar](http://www.veramolnar.com)'s
 artworks. Output is generated as a set of vector shapes in Scalable Vector Graphics (SVG) format and printed on the standard output stream. Altepetl
