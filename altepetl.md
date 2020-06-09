@@ -75,10 +75,10 @@ Output:
 
 ``` shell
 # Preview output with ImageMagick's "convert" and Preview.app (Mac OS X)
-./comitl.py --columns=4 --rows=4 --random-seed=12345 | convert svg:- png:- | open -f -a Preview.app
+./altepetl.py --columns=4 --rows=4 --random-seed=12345 | convert svg:- png:- | open -f -a Preview.app
 
 # Preview output with ImageMagick's "convert" and "display" (Linux/BSD/etc.)
-./comitl.py --columns=4 --rows=4 --random-seed=12345 | convert svg:- png:- | display
+./altepetl.py --columns=4 --rows=4 --random-seed=12345 | convert svg:- png:- | display
 ```
 
 ## History
