@@ -19,11 +19,12 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: altepetl.py 128 2020-06-09 15:00:09Z tokai $
+	$Id: altepetl.py 132 2020-06-09 19:57:18Z tokai $
 """
 
 import random
 import argparse
+import sys
 import xml.etree.ElementTree as xtree
 
 __author__  = 'Christian Rosentreter'
@@ -47,7 +48,7 @@ class USquare():
 	def __str__(self):
 		m  = self.dmod[self.direction]
 		m2 = m[2] * self.scale
-		v  = 0.18 * min(self.variation, 1.0) 
+		v  = 0.18 * min(self.variation, 1.0)
 
 		layout = [
 			['M',  -0.5 * m2 + self.x],
