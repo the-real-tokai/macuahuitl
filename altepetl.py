@@ -19,7 +19,7 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: altepetl.py 132 2020-06-09 19:57:18Z tokai $
+	$Id: altepetl.py 133 2020-06-11 23:09:16Z tokai $
 """
 
 import random
@@ -34,7 +34,7 @@ __all__     = ['USquare']
 
 
 class USquare():
-	"""SVG description for a square 'U' shape, optionally rotated and/ or flipped."""
+	"""SVG description for a square 'U' shape, optionally rotated by 90° and/ or flipped."""
 
 	dmod = {'n':['h', 'v', 1], 'e':['v', 'h', 1], 'w':['v', 'h', -1], 's':['h', 'v', -1]}
 
@@ -46,24 +46,22 @@ class USquare():
 		self.variation = variation
 
 	def __str__(self):
-		m  = self.dmod[self.direction]
-		m2 = m[2] * self.scale
-		v  = 0.18 * min(self.variation, 1.0)
+		mh, mv, m2 = self.dmod[self.direction]
+		m2 *= self.scale
+		v   = 0.18 * min(self.variation, 1.0)
 
-		layout = [
-			['M',  -0.5 * m2 + self.x],
-			[' ',  -0.5 * m2 + self.y],
-			[m[0],  (0.2 + v) * m2],
-			[m[1],  0.8 * m2],
-			[m[0],  (0.6 - v) * m2],
-			[m[1], -0.8 * m2],
-			[m[0],  0.2 * m2],
-			[m[1],  1.0 * m2],
-			[m[0], -1.0 * m2],
-			['Z',  None]
-		]
-
-		return ''.join(l[0] + ('' if l[1] is None else str(l[1])) for l in layout)
+		return ''.join(str(s) for s in [
+			'M', -0.5 * m2 + self.x,
+			' ', -0.5 * m2 + self.y,
+			mh,  (0.2 + v) * m2,
+			mv,   0.8 * m2,
+			mh,  (0.6 - v) * m2,
+			mv,  -0.8 * m2,
+			mh,   0.2 * m2,
+			mv,   1.0 * m2,
+			mh,  -1.0 * m2,
+			'Z', ''
+		])
 
 
 def main():
@@ -120,7 +118,7 @@ def main():
 		for y in range(0, grid_y):
 			dx = (x * grid_offset) + (grid_offset / 2.0) + frame + chaos.uniform(-jiggle, jiggle)
 			dy = (y * grid_offset) + (grid_offset / 2.0) + frame + chaos.uniform(-jiggle, jiggle)
-			squares.append(USquare(dx, dy, grid_size, chaos.choice('nwes'), chaos.uniform(0.0, variation)))
+			squares.append(USquare(dx, dy, grid_size, chaos.choice('news'), chaos.uniform(0.0, variation)))
 
 	vbw = int((grid_offset * grid_x) + (frame * 2.0))
 	vbh = int((grid_offset * grid_y) + (frame * 2.0))
