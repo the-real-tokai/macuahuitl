@@ -1,4 +1,4 @@
-# The "Macuahuitl" Generative Art Toolbox
+# The “Macuahuitl” Generative Art Toolbox
 
 [![GitHub](https://img.shields.io/github/license/the-real-tokai/macuahuitl?color=green&label=License&style=flat)](https://github.com/the-real-tokai/macuahuitl/blob/master/LICENSE)
 [![GitHub Code Size in Bytes](https://img.shields.io/github/languages/code-size/the-real-tokai/macuahuitl?label=Code%20Size&style=flat)](https://github.com/the-real-tokai/macuahuitl/)
@@ -7,7 +7,7 @@
 
 ## Synopsis
 
-*The "Macuahuiltl" Generative Art Toolbox* is a collection of personal `Python 3` scripts to
+*The “Macuahuiltl” Generative Art Toolbox* is a collection of personal `Python 3` scripts to
 generate artworks or elements for artworks that can either be used directly or processed further
 in common vector design software packages.
 
@@ -59,6 +59,10 @@ coming soon.
 coming soon.
 
 ### Acahualli
+
+coming soon.
+
+### Ohtli
 
 coming soon.
 
