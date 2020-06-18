@@ -19,7 +19,7 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: altepetl.py 133 2020-06-11 23:09:16Z tokai $
+	$Id: altepetl.py 144 2020-06-18 17:04:01Z tokai $
 """
 
 import random
@@ -28,7 +28,7 @@ import sys
 import xml.etree.ElementTree as xtree
 
 __author__  = 'Christian Rosentreter'
-__version__ = '1.1'
+__version__ = '1.2'
 __all__     = ['USquare']
 
 
@@ -143,10 +143,13 @@ def main():
 		try:
 			import os
 			from cairosvg import svg2png
+			
+			w = vbw if user_input.output_size is None else user_input.output_size
+			
 			svg2png(bytestring=rawxml,
 				write_to=os.path.realpath(os.path.expanduser(user_input.output)),
-				output_width=user_input.output_size,
-				output_height=int(user_input.output_size * vbh / vbw)
+				output_width=int(w),
+				output_height=int(w * vbh / vbw)
 			)
 		except ImportError as e:
 			print('Couldn\'t rasterize nor write a PNG file. Required Python module \'cairosvg\' is not available: {}'.format(str(e)), file=sys.stderr)

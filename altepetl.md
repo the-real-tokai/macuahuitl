@@ -85,6 +85,11 @@ Output:
 
 <table>
     <tr>
+        <td valign=top>1.2</td>
+        <td valign=top nowrap>18-Jun-2020</td>
+        <td>Fixed PNG saving when `--output-size` was not passed.</td>
+    </tr>
+    <tr>
         <td valign=top>1.1</td>
         <td valign=top nowrap>09-Jun-2020</td>
         <td>Initial public source code release</td>
