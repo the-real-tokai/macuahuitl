@@ -68,10 +68,7 @@ coming soon.
 
 ### Temo
 
-<img width="90" height="90" src="Documentation/Temo/Examples/basic_02.svg" alt="Figure 1 - Temo Example">
-<img width="90" height="90" src="Documentation/Temo/Examples/basic_03.svg" alt="Figure 2 - Temo Example">
-<img width="90" height="90" src="Documentation/Temo/Examples/basic_04.svg" alt="Figure 3 - Temo Example">
-<img width="90" height="90" src="Documentation/Temo/Examples/basic_05.svg" alt="Figure 4 - Temo Example">
+<img width="90" height="90" src="Documentation/Temo/Examples/basic_02.svg" alt="Figure 1 - Temo Example"> <img width="90" height="90" src="Documentation/Temo/Examples/basic_03.svg" alt="Figure 2 - Temo Example"> <img width="90" height="90" src="Documentation/Temo/Examples/basic_04.svg" alt="Figure 3 - Temo Example"> <img width="90" height="90" src="Documentation/Temo/Examples/basic_05.svg" alt="Figure 4 - Temo Example">
 
 Temo creates a colorful maze inspired by a famous one line C64 BASIC program (`10 PRINT CHR$(205.5+RND(1)); : GOTO 10`). Output is generated as a set
 of vector shapes in Scalable Vector Graphics (SVG) format and printed on the standard output stream. Temo also supports optional PNG output (with `cairosvg`),
