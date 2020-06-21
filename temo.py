@@ -19,35 +19,51 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: temo.py 146 2020-06-19 14:15:06Z tokai $
+	$Id: temo.py 154 2020-06-21 06:34:56Z tokai $
 """
 
 import random
 import argparse
 import sys
 import colorsys
+import logging
+from enum import Enum
 import xml.etree.ElementTree as xtree
 
 __author__  = 'Christian Rosentreter'
-__version__ = '1.1'
+__version__ = '1.2'
 __all__     = []
+
+
+
+class Direction(Enum):
+	"""<insert description>"""
+	NORTH = 1
+	SOUTH = 2
+	EAST  = 3
+	WEST  = 4
+
+
+class Slope(Enum):
+	"""<insert description>"""
+	UP    = 0  # "/"
+	DOWN  = 1  # "\"
+
 
 
 class DLine():
 	"""A diagonal line segment inside a square."""
 
-	def __init__(self, direction, hue, x1, y1, x2, y2):
-		# direction = 1 -> "\"
-		# direction = 0 -> "/"
-		self.direction = direction
-		self.hue       = hue
-		self.x1        = x1 if direction else x2
-		self.x2        = x2 if direction else x1
-		self.y1        = y1
-		self.y2        = y2
+	def __init__(self, slope, hue, x1, y1, x2, y2):
+		self.slope = slope
+		self.hue   = hue
+		self.x1    = x1 if (slope == Slope.DOWN) else x2
+		self.x2    = x2 if (slope == Slope.DOWN) else x1
+		self.y1    = y1
+		self.y2    = y2
 
 	def __repr__(self):
-		return '\\' if self.direction else '/'
+		return '\\' if (self.slope == Slope.DOWN) else '/'
 
 
 def hue_blend(a, b):
@@ -61,25 +77,31 @@ def hue_blend(a, b):
 	return a + (d / 2.0)
 
 
-def lookup_hue(direction, x, y, rows):
+def lookup_hue(slope, x, y, rows, hue_shift_line):
 	"""Looks up a hue value or a pair of hue values from the already generated grid elements."""
 	hues = []
 	if y:
-		if direction: # "\"
-			if x and rows[y-1][x-1].direction:
+		if slope == Slope.DOWN:
+			if x and (rows[y-1][x-1].slope == Slope.DOWN):
 				hues.append(rows[y-1][x-1].hue)
-			if rows[y-1][x].direction == 0:
+			if rows[y-1][x].slope == Slope.UP:
 				hues.append(rows[y-1][x].hue)
-		else:  # direction = "/"
-			if rows[y-1][x].direction:
+		else:  # slope == Slope.UP
+			if rows[y-1][x].slope == Slope.DOWN:
 				hues.append(rows[y-1][x].hue)
-			if (x < len(rows[y-1]) - 1) and (rows[y-1][x+1].direction == 0):
+			if (x < len(rows[y-1]) - 1) and (rows[y-1][x+1].slope == Slope.UP):
 				hues.append(rows[y-1][x+1].hue)
 	if hues:
 		if len(hues) == 2:
 			return hue_blend(hues[0], hues[1])
-		return (hues[0] + 15.0) % 360
+		return (hues[0] + hue_shift_line) % 360
 	return None
+
+
+def hls_to_hex(hue, lightness, saturation):
+	"""Converts a HLS color triplet into a SVG hex string."""
+	return '#{:02x}{:02x}{:02x}'.format(*(int(c*255) for c in list(colorsys.hls_to_rgb(hue / 360, lightness, saturation))))
+
 
 
 def main():
@@ -109,6 +131,8 @@ def main():
 	g.add_argument('--stroke-width',     metavar='FLOAT',    type=float, help='width of the generated strokes  [:2.0]', default=2.0)
 	g.add_argument('--background-color', metavar='COLOR',    type=str,   help='SVG compliant color specification or identifier; adds a background <rect> to the SVG output')
 	g.add_argument('--hue-shift',        metavar='FLOAT',    type=float, help='amount to rotate an imaginary color wheel before looking up new colors (in degrees)  [:15.0]', default=15.0)
+	g.add_argument('--hue-shift-line',   metavar='FLOAT',    type=float, help='separate hue shift for continuous lines; if not passed `--hue-shift\' applies too')
+	g.add_argument('--best-path-width',  metavar='FLOAT',    type=float, help='show the best (aka the longest) path through the maze and set width of its marker line')
 
 	g = ap.add_argument_group('Output')
 	g.add_argument('-o', '--output',    metavar='FILENAME', type=str,   help='optionally rasterize the generated vector paths and write the result into a PNG file (requires the `svgcairo\' Python module)')
@@ -123,19 +147,76 @@ def main():
 	frame      = user_input.frame
 	rows       = []
 	master_hue = chaos.uniform(0,360)
+	huesl      = user_input.hue_shift if user_input.hue_shift_line is None else user_input.hue_shift_line
 
 	for y in range(0, user_input.rows):
 		# master_hue = (360 / user_input.rows * y) % 360
 		rows.append([])
 		for x in range(0, user_input.columns):
-			direction = chaos.choice([0, 1])
-			hue       = lookup_hue(direction, x, y, rows)
+			slope = chaos.choice([Slope.UP, Slope.DOWN])
+			hue   = lookup_hue(slope, x, y, rows, huesl)
 			if hue is None:
 				hue = master_hue
 				master_hue = (master_hue + user_input.hue_shift) % 360
-			rows[y].append(DLine(direction, hue, (x * scale + frame), (y * scale + frame), (x * scale + scale + frame), (y * scale + scale + frame)))
+			rows[y].append(DLine(slope, hue, (x * scale + frame), (y * scale + frame), (x * scale + scale + frame), (y * scale + scale + frame)))
 
-	# Output…
+	# Primitive path walking…
+	#
+	bestwalker = None
+	circle_pos = None
+
+	if user_input.best_path_width:
+		coords = []
+		for x in range(0, user_input.columns):
+			coords.append((x, -1, Direction.SOUTH))
+			coords.append((x, user_input.rows, Direction.NORTH))
+		for y in range(0, user_input.rows):
+			coords.append((-1, y, Direction.EAST))
+			coords.append((user_input.columns, y, Direction.WEST))
+
+		offset = scale / 2.0
+
+		for pos in coords:
+			wx, wy, wd = pos
+			cx = (wx * scale) + frame + offset
+			cy = (wy * scale) + frame + offset
+			tempwalker = ['M{} {}{}{}'.format(cx, cy,
+				'v' if wd in (Direction.SOUTH, Direction.NORTH) else 'h',
+				offset if wd in (Direction.SOUTH, Direction.EAST) else -offset
+			)]
+			tx, ty = 1, 1
+
+			while True:
+				if wd == Direction.SOUTH:
+					wy += 1
+					if wy >= user_input.rows:
+						break
+					wd, tx, ty = (Direction.EAST, 1, 1) if (rows[wy][wx].slope == Slope.DOWN) else (Direction.WEST, -1, 1)
+				elif wd == Direction.WEST:
+					wx -= 1
+					if wx < 0:
+						break
+					wd, tx, ty = (Direction.NORTH, -1, -1) if (rows[wy][wx].slope == Slope.DOWN) else (Direction.SOUTH, -1, 1)
+				elif wd == Direction.EAST:
+					wx += 1
+					if wx >= user_input.columns:
+						break
+					wd, tx, ty = (Direction.SOUTH, 1, 1) if (rows[wy][wx].slope == Slope.DOWN) else (Direction.NORTH, 1, -1)
+				else:  # wd == Direction.NORTH
+					wy -= 1
+					if wy < 0:
+						break
+					wd, tx, ty = (Direction.WEST, -1, -1) if (rows[wy][wx].slope == Slope.DOWN) else (Direction.EAST, 1, -1)
+
+				tempwalker.append('l{} {}'.format((offset * tx), (offset * ty)))
+				logging.debug('New position <%u×%u>, direction <%s>', wx, wy, wd)
+
+			logging.debug(tempwalker)
+			if bestwalker is None or len(tempwalker) > len(bestwalker):
+				bestwalker = tempwalker.copy()
+				circle_pos = (cx, cy)
+
+	# Generate SVG…
 	#
 	vbw = int((scale * user_input.columns) + (frame * 2.0))
 	vbh = int((scale * user_input.rows   ) + (frame * 2.0))
@@ -151,29 +232,48 @@ def main():
 	for row_id, row in enumerate(rows):
 		for col_id, element in enumerate(row):
 			xtree.SubElement(svg_g, 'line', {
-				'id':'line-{}x{}'.format(col_id + 1, row_id + 1),
-				'x1':str(element.x1),
-				'y1':str(element.y1),
-				'x2':str(element.x2),
-				'y2':str(element.y2),
-				'stroke':'#{:02x}{:02x}{:02x}'.format(*(int(c*255) for c in list(colorsys.hls_to_rgb(element.hue / 360, 0.6, 0.5)))),
+				'id':     'line-{}x{}'.format(col_id + 1, row_id + 1),
+				'x1':     str(element.x1),
+				'y1':     str(element.y1),
+				'x2':     str(element.x2),
+				'y2':     str(element.y2),
+				'stroke': hls_to_hex(element.hue, 0.6, 0.5),
 			})
+
+	if bestwalker:
+		svg_g  = xtree.SubElement(svg, 'g', {'id':'best_walker'})
+		wcolor = hls_to_hex(chaos.uniform(0, 360), 0.5, 0.8)
+		xtree.SubElement(svg_g, 'path', {
+			'd':               ''.join(bestwalker),
+			'stroke-width':    str(user_input.best_path_width),
+			'stroke':          wcolor,
+			'stroke-linecap':  'round',
+			'stroke-linejoin': 'round',
+			'fill':            'none',
+		})
+		xtree.SubElement(svg_g, 'circle', {
+			'id':   'start_point',
+			'cx':   str(circle_pos[0]),
+			'cy':   str(circle_pos[1]),
+			'r':    str(user_input.best_path_width),
+			'fill': wcolor,
+		})
 
 	rawxml = xtree.tostring(svg, encoding='unicode')
 
+	# Output…
+	#
 	if not user_input.output:
 		print(rawxml)
 	else:
 		try:
 			import os
 			from cairosvg import svg2png
-
-			w = vbw if user_input.output_size is None else user_input.output_size
-
-			svg2png(bytestring=rawxml,
-				write_to=os.path.realpath(os.path.expanduser(user_input.output)),
-				output_width=w,
-				output_height=int(w * vbh / vbw)
+			svg2png(
+				bytestring    = rawxml,
+				write_to      = os.path.realpath(os.path.expanduser(user_input.output)),
+				output_width  = user_input.output_size,
+				output_height = int(user_input.output_size * vbh / vbw) if user_input.output_size is not None else None
 			)
 		except ImportError as e:
 			print('Couldn\'t rasterize nor write a PNG file. Required Python module \'cairosvg\' is not available: {}'.format(str(e)), file=sys.stderr)

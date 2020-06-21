@@ -26,8 +26,9 @@ pip --install cairosvg --user
 ```
 usage: temo.py [-V] [-h] [--columns INT] [--rows INT] [--scale FLOAT]
                [--random-seed INT] [--frame FLOAT] [--stroke-width FLOAT]
-               [--background-color COLOR] [--hue-shift FLOAT] [-o FILENAME]
-               [--output-size INT]
+               [--background-color COLOR] [--hue-shift FLOAT]
+               [--hue-shift-line FLOAT] [--best-path-width FLOAT]
+               [-o FILENAME] [--output-size INT]
 
 Startup:
   -V, --version         show version number and exit
@@ -48,6 +49,12 @@ Miscellaneous:
                         a background <rect> to the SVG output
   --hue-shift FLOAT     amount to rotate an imaginary color wheel before
                         looking up new colors (in degrees)  [:15.0]
+  --hue-shift-line FLOAT
+                        separate hue shift for continuous lines; if not passed
+                        `--hue-shift' applies too
+  --best-path-width FLOAT
+                        show the best (aka the longest) path through the maze
+                        and set width of its marker line
 
 Output:
   -o FILENAME, --output FILENAME
@@ -69,6 +76,20 @@ Output:
 ```
 
 ``` shell
+# One Tiny Worm in its Home
+./temo.py \
+	-o "tinyworm.png"      \
+	--output-size=320      \
+	--stroke-width=1       \
+	--hue-shift=15         \
+	--hue-shift-line=0     \
+	--best-path-width=2    \
+	--rows=3               \
+	--columns=3            \
+	--background="#1a1b2c"
+```
+
+``` shell
 # Preview output with ImageMagick's "convert" and Preview.app (Mac OS X)
 ./temo.py --random-seed=12345 | convert svg:- png:- | open -f -a Preview.app
 
@@ -79,9 +100,22 @@ Output:
 ## History
 
 <table>
-    <tr>
-        <td valign=top>1.1</td>
-        <td valign=top nowrap>19-Jun-2020</td>
-        <td>Initial public source code release</td>
-    </tr>
+	<tr>
+		<td valign=top>1.2</td>
+		<td valign=top nowrap>21-Jun-2020</td>
+		<td>
+			<ul>
+				<li>Added `--best-path-width` option to ignite a simple solver to find and visualize the longest path 
+					through the generated maze (aka "the worm")
+				<li>Fixed missing handling of user input for hue shift in continuous lines and added `--hue-shift-line` option
+					for further fine tuning of the effect
+				<li>Various code improvements
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td valign=top>1.1</td>
+		<td valign=top nowrap>19-Jun-2020</td>
+		<td>Initial public source code release</td>
+	</tr>
 </table>
