@@ -76,6 +76,16 @@ and has a handful of parameters for configuration of the generated artwork.
 
 [Direct Download](https://raw.githubusercontent.com/the-real-tokai/macuahuitl/master/temo.py) | [Documentation](temo.md)
 
+### Teocuitlatl
+
+Creates a grid of colored squares that are accentuated with smaller squares or discs inspired by works of *Victor Vasarely*. Additional
+color palettes of works of other op-art artists including *Bridget Riley* and *Ellsworth Kelly* are included for further experimentation
+with the theme. Output is generated as a set of vector shapes in Scalable Vector Graphics (SVG) format and printed on the standard
+output stream. Teocuitlatl also supports optional PNG output (with `cairosvg`), and has a handful of parameters for configuration of the
+generated artwork.
+
+[Direct Download](https://raw.githubusercontent.com/the-real-tokai/macuahuitl/master/teocuitlatl.py) | [Documentation](teocuitlatl.md)
+
 ## Copyright and License
 
 Copyright © 2019-2020 Christian Rosentreter
