@@ -74,7 +74,7 @@ Output:
 
 ``` shell
 # Generate a SVG file
-./teocuitlatl.py --columns=8 -rows=5 > output.svg
+./teocuitlatl.py --columns=8 --rows=5 > output.svg
 
 # Rasterize directly into a PNG file (requires "cairosvg")
 ./teocuitlatl.py -o output.png --output-size=1024

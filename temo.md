@@ -67,9 +67,10 @@ Output:
 ```
 
 ### Usage Examples
+
 ``` shell
 # Generate a SVG file
-./temo.py --columns=8 -rows=5 > output.svg
+./temo.py --columns=8 --rows=5 > output.svg
 
 # Rasterize directly into a PNG file (requires "cairosvg")
 ./temo.py --hue-shift=4 -o output.png
