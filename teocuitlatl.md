@@ -21,7 +21,7 @@ pip --install cairosvg --user
 
 ## Output Examples
 
-<img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_01.svg" alt="Figure 1"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_02.svg" alt="Figure 2"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_04.svg" alt="Figure 3"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_03.svg" alt="Figure 4"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_03.svg" alt="Figure 5">
+<img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_01.svg" alt="Figure 1"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_02.svg" alt="Figure 2"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_03.svg" alt="Figure 3"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_04.svg" alt="Figure 4"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_05.svg" alt="Figure 5">
 
 ## Usage
 
