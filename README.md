@@ -78,6 +78,8 @@ and has a handful of parameters for configuration of the generated artwork.
 
 ### Teocuitlatl
 
+<img width="90" height="90" src="Documentation/Teocuitlatl/Examples/basic_01.svg" alt="Figure 1"> <img width="90" height="90" src="Documentation/Teocuitlatl/Examples/basic_02.svg" alt="Figure 2"> <img width="90" height="90" src="Documentation/Teocuitlatl/Examples/basic_04.svg" alt="Figure 3"> <img width="90" height="90" src="Documentation/Teocuitlatl/Examples/basic_03.svg" alt="Figure 4"> <img width="90" height="90" src="Documentation/Teocuitlatl/Examples/basic_03.svg" alt="Figure 5">
+
 Creates a grid of colored squares that are accentuated with smaller squares or discs inspired by works of *Victor Vasarely*. Additional
 color palettes of works of other op-art artists including *Bridget Riley* and *Ellsworth Kelly* are included for further experimentation
 with the theme. Output is generated as a set of vector shapes in Scalable Vector Graphics (SVG) format and printed on the standard

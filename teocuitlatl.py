@@ -19,31 +19,31 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: teocuitlatl.py 159 2020-07-03 21:00:53Z tokai $
+	$Id: teocuitlatl.py 161 2020-07-04 14:15:11Z tokai $
 """
 
 import random
 import argparse
 import sys
-#import math
-#import colorsys
 import xml.etree.ElementTree as xtree
 from collections import Counter
 
 __author__  = 'Christian Rosentreter'
-__version__ = '1.1'
+__version__ = '1.2'
 __all__     = []
 
 
 
 def triangular_stronger_bias(chaos, low, high, bias, iterations):
+	"""Returns random values with a very strong bias."""
 	candidates = [int(chaos.triangular(low, high, bias)) for _ in range(iterations)]
 	result_set = Counter(candidates).most_common(1)
 	return chaos.choice(result_set)[0]
 
 
 def color_to_hex(color):
-	return '#{:02x}{:02x}{:02x}'.format(*[c for c in color])
+	"""Converts a color tuple (r,g,b) into a SVG compatible hexadecimal color descriptor."""
+	return '#{:02x}{:02x}{:02x}'.format(*color)
 
 
 def main():
@@ -75,7 +75,7 @@ def main():
 			(206, 105, 120),
 			(241, 103 , 98),
 			(250, 139,   0),
-			(250, 196,  64),	
+			(250, 196,  64),
 		],
 		'binary': [
 			(  0,   0,   0),
@@ -138,18 +138,18 @@ def main():
 	g.add_argument('--palette',            choices=list(palettes.keys()),  help='choose random colors from the specified color scheme  [:default]', default='shadowplay')
 	g.add_argument('--random-seed',        metavar='INT',      type=int,   help='fixed initialization of the random number generator for predictable results')
 	g.add_argument('--randomize',          action='store_true',            help='generate truly random layouts; other algorithm values provided via command line parameters are utilized as limits')
-	
+
 	g = ap.add_argument_group('Output')
 	g.add_argument('-o', '--output',       metavar='FILENAME', type=str,   help='optionally rasterize the generated vector paths and write the result into a PNG file (requires the `svgcairo\' Python module)')
 	g.add_argument('--output-size',        metavar='INT',      type=int,   help='force pixel width of the raster image, height is automatically calculated; if omitted the generated SVG viewbox dimensions are used')
 
 	user_input = ap.parse_args()
 
-	
+
 	# Generate data/ SVG…
 	#
 	chaos      = random.Random(user_input.random_seed)
-	
+
 	tile_size  = max(1.0, user_input.scale)
 	tiles_x    = max(1, user_input.columns)
 	tiles_y    = max(1, user_input.rows)
@@ -157,7 +157,10 @@ def main():
 	tile_frame = user_input.padding if user_input.padding is not None else round(0.14 * tile_size, 2)
 	palette    = palettes[user_input.palette] # if chaos.uniform(0, 1) < 0.5 else list(reversed(palettes[user_input.palette]))
 	color_iter = max(1, user_input.color_bias)
-	
+	flip_x     = False if user_input.no_horizontal_flip else True
+	flip_y     = False if user_input.no_vertical_flip else True
+	inset      = False if user_input.no_inset else True
+
 	if user_input.randomize:
 		tile_size  = max(1.0, chaos.uniform(0, tile_size))
 		tiles_x    = (max(1, chaos.randrange(0, tiles_x)))
@@ -165,12 +168,15 @@ def main():
 		#       tyles_y = (max(1, chaos.randrange(0, tiles_y)))
 		if tiles_x % 2:
 			tiles_x += 1
-		tiles_y    = tiles_x 
+		tiles_y    = tiles_x
 		#
 		tiles_ioff = chaos.randrange(0, tiles_ioff)
 		tile_frame = chaos.uniform(0, tile_frame)
 		palette    = palettes[chaos.choice(list(palettes.keys()))]
-		color_iter = max(1, chaos.randrange(0, color_iter))
+		color_iter = int(max(1.0, triangular_stronger_bias(chaos, 0, color_iter, 0, 10)))
+		flip_x     = chaos.randrange(0, 1)
+		flip_y     = chaos.randrange(0, 1)
+		inset      = chaos.randrange(0, 1)
 
 	if chaos.uniform(0, 1) < 0.5:
 		palette.reverse()
@@ -180,40 +186,40 @@ def main():
 	vbw        = int(tile_size * tiles_x)
 	vbh        = int(tile_size * tiles_y)
 	colors     = len(palette)
-	
+
 	svg = xtree.Element('svg', {'width':'100%', 'height':'100%', 'xmlns':'http://www.w3.org/2000/svg', 'viewBox':'0 0 {} {}'.format(vbw, vbh)})
 	title = xtree.SubElement(svg, 'title')
 	title.text = 'A Teocuitlatl Artwork'
-	
+
 	tile_backgrounds = []
 	init_shape = chaos.choice([0, 1])  # 1 == square, 2 == circle
-	
+
 	for y in range(0, tiles_y):
 		for x in range(0, tiles_x):
 
 			#  Select inner shape
 			shape = init_shape
 			bias  = x / tiles_x * colors
-			if (user_input.no_inset is False) and (x >= tiles_ioff) and (x < (tiles_x - tiles_ioff)) and (y >= tiles_ioff) and (y < (tiles_y - tiles_ioff)):
+			if inset and (tiles_ioff <= x < (tiles_x - tiles_ioff)) and (tiles_ioff <= y < (tiles_y - tiles_ioff)):
 				shape = 1 - shape  # swap
 				bias  = colors - bias
 				# TODO: reversing the bias direction should also change/ map the range and
 				#       take 'tiles_ioff' into account (so the inset uses the full range of
 				#       available colors), maybe something like this:
 				#       "colors - (x+tiles_ioff / tiles_x-tiles_ioff*2  * colors)" ?
-			if (user_input.no_vertical_flip is False) and (y >= tiles_y / 2):
+			if flip_y and (y >= (tiles_y / 2)):
 				shape = 1 - shape  # swap
-			if (user_input.no_horizontal_flip is False) and (x >= tiles_x / 2):
+			if flip_x and (x >= (tiles_x / 2)):
 				shape = 1 - shape  # swap
-			
+
 			#  Fetch background color
 			loop_cnt = 0
 			while loop_cnt < 100:
 				loop_cnt += 1
 				tile_color_bg = triangular_stronger_bias(chaos, 0, colors, bias, color_iter)
-				if x > 0 and tile_color_bg is tile_backgrounds[-1]:       # one to the left
+				if (x > 0) and (tile_color_bg is tile_backgrounds[-1]):       # one to the left
 					continue
-				if y > 0 and tile_color_bg is tile_backgrounds[-tiles_x]: # one to the top
+				if (y > 0) and (tile_color_bg is tile_backgrounds[-tiles_x]): # one to the top
 					continue
 				break
 			else:
@@ -229,10 +235,10 @@ def main():
 					break
 			else:
 				print('Warning: Couldn\'t get a non-colliding accent shape color for tile "{}×{}", because the color bias is too high for the amount of available colors.'.format(x, y), file=sys.stderr)
-			
+
 			#  Output the tile
 			svg_tile_group = xtree.SubElement(svg, 'g', {'id': 'tile_{}x{}'.format(x+1, y+1)})
-			
+
 			xtree.SubElement(svg_tile_group, 'rect', {
 				'x':      str(x * tile_size),
 				'y':      str(y * tile_size),
@@ -242,7 +248,7 @@ def main():
 				'fill':   color_to_hex(palette[tile_color_bg])
 			})
 
-			if shape is 0:
+			if shape == 0:
 				xtree.SubElement(svg_tile_group, 'rect', {
 					'x':      str((x * tile_size) + tile_frame),
 					'y':      str((y * tile_size) + tile_frame),
@@ -277,8 +283,8 @@ def main():
 			)
 		except ImportError as e:
 			print('Couldn\'t rasterize nor write a PNG file. Required Python module \'cairosvg\' is not available: {}'.format(str(e)), file=sys.stderr)
-	
 
-	
+
+
 if __name__ == '__main__':
 	main()

@@ -21,6 +21,7 @@ pip --install cairosvg --user
 
 ## Output Examples
 
+<img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_01.svg" alt="Figure 1"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_02.svg" alt="Figure 2"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_04.svg" alt="Figure 3"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_03.svg" alt="Figure 4"> <img width="220" height="220" src="Documentation/Teocuitlatl/Examples/basic_03.svg" alt="Figure 5">
 
 ## Usage
 
@@ -29,7 +30,7 @@ usage: teocuitlatl.py [-V] [-h] [--columns INT] [--rows INT] [--no-inset]
                       [--inset-offset INT] [--no-horizontal-flip]
                       [--no-vertical-flip] [--color-bias INT] [--scale FLOAT]
                       [--padding FLOAT]
-                      [--palette {shadowplay,binary,greyscale,rgb,yell}]
+                      [--palette {shadowplay,spectrum9,binary,greyscale,rgb,yell}]
                       [--random-seed INT] [--randomize] [-o FILENAME]
                       [--output-size INT]
 
@@ -50,7 +51,7 @@ Algorithm:
   --scale FLOAT         base scale factor of the grid elements  [:74.0]
   --padding FLOAT       manually force inner padding to control the frame
                         around the accent shapes
-  --palette {shadowplay,binary,greyscale,rgb,yell}
+  --palette {shadowplay,spectrum9,binary,greyscale,rgb,yell}
                         choose random colors from the specified color scheme
                          [:default]
   --random-seed INT     fixed initialization of the random number generator
@@ -70,6 +71,7 @@ Output:
 ```
 
 ### Usage Examples
+
 ``` shell
 # Generate a SVG file
 ./teocuitlatl.py --columns=8 -rows=5 > output.svg
@@ -89,6 +91,16 @@ Output:
 ## History
 
 <table>
+	<tr>
+		<td valign=top>1.2</td>
+		<td valign=top nowrap>4-Jul-2020</td>
+		<td>
+			<ul>
+				<li>Parameters `--no-horizontal-flip`, `--no-vertical-flip`, and `--no-inset` are now also randomized
+					when `--randomize` is used
+			</ul>
+		</td>
+	</tr>
 	<tr>
 		<td valign=top>1.1</td>
 		<td valign=top nowrap>3-Jul-2020</td>
