@@ -19,7 +19,7 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: temo.py 154 2020-06-21 06:34:56Z tokai $
+	$Id: temo.py 162 2020-07-04 14:23:33Z tokai $
 """
 
 import random
@@ -173,6 +173,7 @@ def main():
 		for y in range(0, user_input.rows):
 			coords.append((-1, y, Direction.EAST))
 			coords.append((user_input.columns, y, Direction.WEST))
+		chaos.shuffle(coords)
 
 		offset = scale / 2.0
 
