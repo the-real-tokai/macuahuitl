@@ -51,7 +51,7 @@ Algorithm:
   --scale FLOAT         base scale factor of the grid elements  [:74.0]
   --padding FLOAT       manually force inner padding to control the frame
                         around the accent shapes
-  --palette {shadowplay,spectrum9,binary,greyscale,rgb,yell}
+  --palette {shadowplay,spectrum9,binary,greyscale,rgb,yell,owinja,folklore}
                         choose random colors from the specified color scheme
                          [:default]
   --random-seed INT     fixed initialization of the random number generator
@@ -91,6 +91,16 @@ Output:
 ## History
 
 <table>
+	<tr>
+		<td valign=top>1.3</td>
+		<td valign=top nowrap>7-Jul-2020</td>
+		<td>
+			<ul>
+				<li>Added new palettes `owinja` and `folklore`
+				<li>Switched default palette to the actual Vasarely inspired `folklore` palette
+			</ul>
+		</td>
+	</tr>
 	<tr>
 		<td valign=top>1.2</td>
 		<td valign=top nowrap>4-Jul-2020</td>

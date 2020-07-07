@@ -29,7 +29,7 @@ import xml.etree.ElementTree as xtree
 from collections import Counter
 
 __author__  = 'Christian Rosentreter'
-__version__ = '1.2'
+__version__ = '1.3'
 __all__     = []
 
 
@@ -110,6 +110,35 @@ def main():
 			(0xef, 0xba, 0x1f),
 			(0xff, 0xff, 0xff),
 		],
+		'owinja': [  # Carla Thompson: "Turquoise & Orange Star Quilt"
+			(195, 216, 227),
+			(148, 209, 225),
+			(  0, 141, 171),
+			(162,  37,  23),
+			(231, 105,  83),
+			(252, 117,  21),	
+		],
+		'folklore': [  # Victor Vasarely: "Planetary Folklore Participations N° 1" (selection)
+			(187, 248, 249),
+			(252, 252,   4),
+			(105, 222, 249),
+			(252, 207,  10),
+			(250, 126, 250),
+			( 35, 249,  66),
+			(  4, 159, 242),
+			(251, 117,  13),
+			( 15, 114, 214),
+			(  6, 187,  82),
+			(252,  62,   4),
+			( 36, 112, 178),
+			(206,  76, 113),
+			(105,  58, 162),
+			( 10, 131,  51),
+			(135,  27,  65),
+			( 57,  34, 114),
+			( 17,  33,  13),
+		],
+		# TODO: implement "original" special selection mode (separate array)
 	}
 
 
@@ -135,7 +164,7 @@ def main():
 	g.add_argument('--color-bias',         metavar='INT',      type=int,   help='increase amount of directional bias when choosing random colors  [:1]', default=1)
 	g.add_argument('--scale',              metavar='FLOAT',    type=float, help='base scale factor of the grid elements  [:74.0]', default=74.0)
 	g.add_argument('--padding',            metavar='FLOAT',    type=float, help='manually force inner padding to control the frame around the accent shapes')
-	g.add_argument('--palette',            choices=list(palettes.keys()),  help='choose random colors from the specified color scheme  [:default]', default='shadowplay')
+	g.add_argument('--palette',            choices=list(palettes.keys()),  help='choose random colors from the specified color scheme  [:default]', default='folklore')
 	g.add_argument('--random-seed',        metavar='INT',      type=int,   help='fixed initialization of the random number generator for predictable results')
 	g.add_argument('--randomize',          action='store_true',            help='generate truly random layouts; other algorithm values provided via command line parameters are utilized as limits')
 
