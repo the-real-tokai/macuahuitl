@@ -19,7 +19,8 @@ pip --install cairosvg --user
 
 ## Output Examples
 
-<img width="220" height="220" src="Documentation/Temo/Examples/basic_01.svg" alt="Figure 1"> <img width="220" height="220" src="Documentation/Temo/Examples/basic_02.svg" alt="Figure 2"> <img width="220" height="220" src="Documentation/Temo/Examples/basic_03.svg" alt="Figure 3"> <img width="220" height="220" src="Documentation/Temo/Examples/basic_04.svg" alt="Figure 4"> <img width="220" height="220" src="Documentation/Temo/Examples/basic_05.svg" alt="Figure 5">
+<img width="220" height="220" src="Documentation/Temo/Examples/basic_01.svg" alt="Figure 1"> <img width="220" height="220" src="Documentation/Temo/Examples/basic_02.svg" alt="Figure 2"> <img width="220" height="220" src="Documentation/Temo/Examples/basic_03.svg" alt="Figure 3"> <img width="220" height="220" src="Documentation/Temo/Examples/basic_04.svg" alt="Figure 4">
+<img width="220" height="220" src="Documentation/Temo/Examples/basic_05.svg" alt="Figure 5"> <img width="220" height="220" src="Documentation/Temo/Examples/basic_06.svg" alt="Figure 6"> <img width="220" height="220" src="Documentation/Temo/Examples/basic_07.svg" alt="Figure 7">
 
 ## Usage
 
@@ -28,7 +29,9 @@ usage: temo.py [-V] [-h] [--columns INT] [--rows INT] [--scale FLOAT]
                [--random-seed INT] [--frame FLOAT] [--stroke-width FLOAT]
                [--background-color COLOR] [--hue-shift FLOAT]
                [--hue-shift-line FLOAT] [--best-path-width FLOAT]
-               [-o FILENAME] [--output-size INT]
+               [--schotter-falloff {infinite,horizontal,vertical,radial,box,random}]
+               [--schotter-inverse] [--schotter-rotation FLOAT]
+               [--schotter-offset FLOAT] [-o FILENAME] [--output-size INT]
 
 Startup:
   -V, --version         show version number and exit
@@ -55,6 +58,16 @@ Miscellaneous:
   --best-path-width FLOAT
                         show the best (aka the longest) path through the maze
                         and set width of its marker line
+
+Schotter:
+  --schotter-falloff {infinite,horizontal,vertical,radial,box,random}
+                        enable `George Nees'-style randomizing rotations and
+                        offsets of the maze's line segments
+  --schotter-inverse    flip the schotter mapping of the selected mode
+  --schotter-rotation FLOAT
+                        rotational variance for schottering  [:0.5]
+  --schotter-offset FLOAT
+                        positional variance for schottering  [:0.25]
 
 Output:
   -o FILENAME, --output FILENAME
@@ -101,6 +114,15 @@ Output:
 ## History
 
 <table>
+	<tr>
+		<td valign=top>1.3</td>
+		<td valign=top nowrap>09-Jul-2020</td>
+		<td>
+			<ul>
+				<li>Added support for various 'schotter' modes
+			</ul>
+		</td>
+	</tr>
 	<tr>
 		<td valign=top>1.2</td>
 		<td valign=top nowrap>21-Jun-2020</td>

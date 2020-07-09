@@ -19,11 +19,12 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: temo.py 162 2020-07-04 14:23:33Z tokai $
+	$Id: temo.py 164 2020-07-09 12:18:58Z tokai $
 """
 
 import random
 import argparse
+import math
 import sys
 import colorsys
 import logging
@@ -31,7 +32,7 @@ from enum import Enum
 import xml.etree.ElementTree as xtree
 
 __author__  = 'Christian Rosentreter'
-__version__ = '1.2'
+__version__ = '1.3'
 __all__     = []
 
 
@@ -54,13 +55,24 @@ class Slope(Enum):
 class DLine():
 	"""A diagonal line segment inside a square."""
 
-	def __init__(self, slope, hue, x1, y1, x2, y2):
+	def __init__(self, slope, hue, x1, y1, x2, y2, angle=0):
 		self.slope = slope
 		self.hue   = hue
-		self.x1    = x1 if (slope == Slope.DOWN) else x2
-		self.x2    = x2 if (slope == Slope.DOWN) else x1
-		self.y1    = y1
-		self.y2    = y2
+
+		if angle:
+			xc      = (x1 + x2) / 2.0
+			yc      = (y1 + y2) / 2.0
+			r       = math.sqrt(math.pow(x2 - x1, 2.0) + math.pow(y2 - y1, 2.0)) / 2.0
+			a       = -math.radians((-45.0 if slope == Slope.DOWN else 45) + angle)
+			self.x1 = math.sin(a) * r + xc
+			self.y1 = math.cos(a) * r + yc
+			self.x2 = math.sin(a + math.pi) * r + xc
+			self.y2 = math.cos(a + math.pi) * r + yc
+		else:
+			self.x1 = x1 if (slope == Slope.DOWN) else x2
+			self.x2 = x2 if (slope == Slope.DOWN) else x1
+			self.y1 = y1
+			self.y2 = y2
 
 	def __repr__(self):
 		return '\\' if (self.slope == Slope.DOWN) else '/'
@@ -134,6 +146,13 @@ def main():
 	g.add_argument('--hue-shift-line',   metavar='FLOAT',    type=float, help='separate hue shift for continuous lines; if not passed `--hue-shift\' applies too')
 	g.add_argument('--best-path-width',  metavar='FLOAT',    type=float, help='show the best (aka the longest) path through the maze and set width of its marker line')
 
+	g = ap.add_argument_group('Schotter')
+	g.add_argument('--schotter-falloff',  choices=('infinite', 'horizontal', 'vertical', 'radial', 'box', 'random'),
+		help='enable `George Nees\'-style randomizing rotations and offsets of the maze\'s line segments')
+	g.add_argument('--schotter-inverse',  action='store_true',           help='flip the schotter mapping of the selected mode')
+	g.add_argument('--schotter-rotation', metavar='FLOAT',   type=float, help='rotational variance for schottering  [:0.5]', default=0.5)
+	g.add_argument('--schotter-offset',   metavar='FLOAT',   type=float, help='positional variance for schottering  [:0.25]', default=0.25)
+
 	g = ap.add_argument_group('Output')
 	g.add_argument('-o', '--output',    metavar='FILENAME', type=str,   help='optionally rasterize the generated vector paths and write the result into a PNG file (requires the `svgcairo\' Python module)')
 	g.add_argument('--output-size',     metavar='INT',      type=int,   help='force pixel width of the raster image, height is automatically calculated; if omitted the generated SVG viewbox dimensions are used')
@@ -153,12 +172,56 @@ def main():
 		# master_hue = (360 / user_input.rows * y) % 360
 		rows.append([])
 		for x in range(0, user_input.columns):
-			slope = chaos.choice([Slope.UP, Slope.DOWN])
-			hue   = lookup_hue(slope, x, y, rows, huesl)
+			xoffset = 0
+			yoffset = 0
+			angle   = 0
+			slope   = chaos.choice([Slope.UP, Slope.DOWN])
+
+			hue     = lookup_hue(slope, x, y, rows, huesl)
 			if hue is None:
 				hue = master_hue
 				master_hue = (master_hue + user_input.hue_shift) % 360
-			rows[y].append(DLine(slope, hue, (x * scale + frame), (y * scale + frame), (x * scale + scale + frame), (y * scale + scale + frame)))
+
+			if user_input.schotter_falloff == 'infinite':
+				schotter_factor = 1.0
+			elif user_input.schotter_falloff == 'random':
+				schotter_factor = chaos.choice([0, 1.0])
+			elif user_input.schotter_falloff == 'vertical':
+				schotter_factor = 1.0 / (user_input.rows - 1) * y
+			elif user_input.schotter_falloff == 'horizontal':
+				schotter_factor = 1.0 / (user_input.columns - 1) * x
+			elif user_input.schotter_falloff == 'radial':
+				xc = (user_input.columns - 1) / 2.0
+				yc = (user_input.rows - 1) / 2.0
+				d  = math.sqrt(math.pow(xc - x, 2.0) + math.pow(yc - y, 2.0)) / 2.0
+				schotter_factor = 1.0 / max(xc, yc) * d
+			elif user_input.schotter_falloff == 'box':
+				md = min(x, (user_input.columns - 1) - x, y, (user_input.rows - 1) - y) * 2.0
+				schotter_factor = 1.0 / max(user_input.columns - 1, user_input.rows - 1) * md
+			else:
+				schotter_factor = 0
+
+			#if schotter_factor > 1.0:
+			#	print('WARNING: schotter_factor too big: {}'.format(schotter_factor), file=sys.stderr)
+
+			if user_input.schotter_inverse:
+				schotter_factor = 1.0 - schotter_factor
+
+			#schotter_factor = -(math.cos(math.pi * schotter_factor) - 1.0) / 2.0  # ease-in-out-sine
+			schotter_factor = schotter_factor * schotter_factor # ease-in-quad
+
+			if schotter_factor:
+				xoffset = chaos.uniform(-scale, scale) * schotter_factor * user_input.schotter_offset
+				yoffset = chaos.uniform(-scale, scale) * schotter_factor * user_input.schotter_offset
+				angle   = chaos.uniform(   -90,    90) * schotter_factor * user_input.schotter_rotation
+
+			rows[y].append(DLine(slope, hue,
+				(x * scale + frame) + xoffset,
+				(y * scale + frame) + yoffset,
+				(x * scale + scale + frame) + xoffset,
+				(y * scale + scale + frame) + yoffset,
+				angle
+			))
 
 	# Primitive path walking…
 	#
