@@ -48,7 +48,7 @@ Algorithm:
   --no-vertical-flip    disable the default vertical accent shape flip
   --color-bias INT      increase amount of directional bias when choosing
                         random colors  [:1]
-  --scale FLOAT         base scale factor of the grid elements  [:74.0]
+  --scale INT           base scale factor of the grid elements  [:74.0]
   --padding FLOAT       manually force inner padding to control the frame
                         around the accent shapes
   --palette {shadowplay,spectrum9,binary,greyscale,rgb,yell,owinja,folklore}
@@ -91,6 +91,20 @@ Output:
 ## History
 
 <table>
+	<tr>
+		<td valign=top>1.4</td>
+		<td valign=top nowrap>16-Jul-2020</td>
+		<td>
+			<ul>
+				<li>Improved overlapping to avoid hairlines in some SVG renderers
+				<li>Switched `--scale' from FLOAT to INT to avoid rounding issues: occasionally parts of the
+					generated artwork was clipped off due to viewbox dimensions already truncated to integer ranges
+				<li>Smaller SVG files due to improved output of float values (no trailing zeros)
+				<li>`--inset', `--no-horizontal-flip', and `--no-vertical-flip' parameters were not properly randomized with `--randomize' due
+					to incorrect randrange() usage.
+			</ul>
+		</td>
+	</tr>
 	<tr>
 		<td valign=top>1.3</td>
 		<td valign=top nowrap>7-Jul-2020</td>

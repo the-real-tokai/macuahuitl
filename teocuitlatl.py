@@ -19,7 +19,7 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: teocuitlatl.py 161 2020-07-04 14:15:11Z tokai $
+	$Id: teocuitlatl.py 166 2020-07-16 20:39:42Z tokai $
 """
 
 import random
@@ -29,7 +29,7 @@ import xml.etree.ElementTree as xtree
 from collections import Counter
 
 __author__  = 'Christian Rosentreter'
-__version__ = '1.3'
+__version__ = '1.4'
 __all__     = []
 
 
@@ -44,6 +44,12 @@ def triangular_stronger_bias(chaos, low, high, bias, iterations):
 def color_to_hex(color):
 	"""Converts a color tuple (r,g,b) into a SVG compatible hexadecimal color descriptor."""
 	return '#{:02x}{:02x}{:02x}'.format(*color)
+
+
+def float_to_svg(v):
+	"""Tries to generate smallest string representation of the supplied float value."""
+	return '{:g}'.format(round(v, 10))
+
 
 
 def main():
@@ -162,7 +168,7 @@ def main():
 	g.add_argument('--no-horizontal-flip', action='store_true',            help='disable the default horizontal accent shape flip')
 	g.add_argument('--no-vertical-flip',   action='store_true',            help='disable the default vertical accent shape flip')
 	g.add_argument('--color-bias',         metavar='INT',      type=int,   help='increase amount of directional bias when choosing random colors  [:1]', default=1)
-	g.add_argument('--scale',              metavar='FLOAT',    type=float, help='base scale factor of the grid elements  [:74.0]', default=74.0)
+	g.add_argument('--scale',              metavar='INT',      type=int,   help='base scale factor of the grid elements  [:74.0]', default=74.0)
 	g.add_argument('--padding',            metavar='FLOAT',    type=float, help='manually force inner padding to control the frame around the accent shapes')
 	g.add_argument('--palette',            choices=list(palettes.keys()),  help='choose random colors from the specified color scheme  [:default]', default='folklore')
 	g.add_argument('--random-seed',        metavar='INT',      type=int,   help='fixed initialization of the random number generator for predictable results')
@@ -179,7 +185,7 @@ def main():
 	#
 	chaos      = random.Random(user_input.random_seed)
 
-	tile_size  = max(1.0, user_input.scale)
+	tile_size  = max(1, user_input.scale)
 	tiles_x    = max(1, user_input.columns)
 	tiles_y    = max(1, user_input.rows)
 	tiles_ioff = user_input.inset_offset if user_input.inset_offset is not None else int(min(tiles_x, tiles_y)/2.0/2.0)
@@ -191,21 +197,21 @@ def main():
 	inset      = False if user_input.no_inset else True
 
 	if user_input.randomize:
-		tile_size  = max(1.0, chaos.uniform(0, tile_size))
-		tiles_x    = (max(1, chaos.randrange(0, tiles_x)))
+		tile_size  = chaos.randrange(0, tile_size) + 1
+		tiles_x    = chaos.randrange(0, tiles_x) + 1
 		# TODO: we get a lot of silly pictures here; use some sane limits for now
-		#       tyles_y = (max(1, chaos.randrange(0, tiles_y)))
+		#       tyles_y = chaos.randrange(0, tiles_y) + 1
 		if tiles_x % 2:
 			tiles_x += 1
 		tiles_y    = tiles_x
 		#
-		tiles_ioff = chaos.randrange(0, tiles_ioff)
+		tiles_ioff = chaos.randrange(0, tiles_ioff + 1)
 		tile_frame = chaos.uniform(0, tile_frame)
 		palette    = palettes[chaos.choice(list(palettes.keys()))]
 		color_iter = int(max(1.0, triangular_stronger_bias(chaos, 0, color_iter, 0, 10)))
-		flip_x     = chaos.randrange(0, 1)
-		flip_y     = chaos.randrange(0, 1)
-		inset      = chaos.randrange(0, 1)
+		flip_x     = chaos.choice([0, 1])
+		flip_y     = chaos.choice([0, 1])
+		inset      = chaos.choice([0, 1])
 
 	if chaos.uniform(0, 1) < 0.5:
 		palette.reverse()
@@ -269,27 +275,27 @@ def main():
 			svg_tile_group = xtree.SubElement(svg, 'g', {'id': 'tile_{}x{}'.format(x+1, y+1)})
 
 			xtree.SubElement(svg_tile_group, 'rect', {
-				'x':      str(x * tile_size),
-				'y':      str(y * tile_size),
-				# Note: overlap of 1 px to avoid potential hairlines between the tiles in some SVG renderers
-				'width':  str(tile_size + (1 if (x + 1) < tiles_x else 0)),
-				'height': str(tile_size + (1 if (y + 1) < tiles_y else 0)),
+				'x':      float_to_svg(x * tile_size),
+				'y':      float_to_svg(y * tile_size),
+				# Note: overlap to avoid potential hairlines between the tiles in some SVG renderers
+				'width':  float_to_svg(tile_size * (2 if ((x + 1) < tiles_x) else 1)),
+				'height': float_to_svg(tile_size * (2 if ((y + 1) < tiles_y) else 1)),
 				'fill':   color_to_hex(palette[tile_color_bg])
 			})
 
 			if shape == 0:
 				xtree.SubElement(svg_tile_group, 'rect', {
-					'x':      str((x * tile_size) + tile_frame),
-					'y':      str((y * tile_size) + tile_frame),
-					'width':  str(stile_size),
-					'height': str(stile_size),
+					'x':      float_to_svg((x * tile_size) + tile_frame),
+					'y':      float_to_svg((y * tile_size) + tile_frame),
+					'width':  float_to_svg(stile_size),
+					'height': float_to_svg(stile_size),
 					'fill':   color_to_hex(palette[tile_color_shape])
 				})
 			else:
 				xtree.SubElement(svg_tile_group, 'circle', {
-					'cx':     str((x * tile_size) + (tile_size / 2)),
-					'cy':     str((y * tile_size) + (tile_size / 2)),
-					'r':      str(stile_rad),
+					'cx':     float_to_svg((x * tile_size) + (tile_size / 2)),
+					'cy':     float_to_svg((y * tile_size) + (tile_size / 2)),
+					'r':      float_to_svg(stile_rad),
 					'fill':   color_to_hex(palette[tile_color_shape])
 				})
 
