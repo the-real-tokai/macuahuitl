@@ -2,7 +2,7 @@
 
 [![GitHub](https://img.shields.io/github/license/the-real-tokai/macuahuitl?color=green&label=License&style=flat)](https://github.com/the-real-tokai/macuahuitl/blob/master/LICENSE)
 [![GitHub Code Size in Bytes](https://img.shields.io/github/languages/code-size/the-real-tokai/macuahuitl?label=Code%20Size&style=flat)](https://github.com/the-real-tokai/macuahuitl/)
-[![IRC](https://img.shields.io/badge/IRC-irc.freenode.net%20%23macuahuitl-orange&style=flat)](https://webchat.freenode.net/#macuahuitl)
+[![IRC](https://img.shields.io/badge/IRC-irc.libera.chat:6697%20%23macuahuitl-orange&style=flat)](https://web.libera.chat/?channel=#macuahuitl)
 [![Twitter Follow](https://img.shields.io/twitter/follow/binaryriot?color=blue&label=Follow%20%40binaryriot&style=flat)](https://twitter.com/binaryriot)
 
 ## Synopsis
@@ -90,7 +90,7 @@ generated artwork.
 
 ## Copyright and License
 
-Copyright © 2019-2020 Christian Rosentreter
+Copyright © 2019-2021 Christian Rosentreter
 (https://www.binaryriot.org/)
 
 All scripts are free software: you can redistribute them and/or modify them under the terms of the [GNU Affero General Public License](LICENSE) as
