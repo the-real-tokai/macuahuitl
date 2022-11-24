@@ -1,7 +1,10 @@
+[FORMAT]
+expected-line-ending-format=LF
+indent-string=\t
+
 [MESSAGES CONTROL]
 # Sanity.
-disable=mixed-indentation,
-	invalid-name,
+disable=invalid-name,
 	too-many-arguments,
 	too-many-nested-blocks,
 	too-many-branches,
@@ -9,7 +12,10 @@ disable=mixed-indentation,
 	too-few-public-methods,
 	too-many-instance-attributes,
 	too-many-locals,
-	bad-continuation,
 	line-too-long,
-	bad-whitespace,
-	import-outside-toplevel
+	import-outside-toplevel,
+	consider-using-f-string
+
+
+[MISCELLANEOUS]
+notes=FIXME,XXX, TODO
