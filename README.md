@@ -3,6 +3,7 @@
 [![GitHub](https://img.shields.io/github/license/the-real-tokai/macuahuitl?color=green&label=License&style=flat)](https://github.com/the-real-tokai/macuahuitl/blob/master/LICENSE)
 [![GitHub Code Size in Bytes](https://img.shields.io/github/languages/code-size/the-real-tokai/macuahuitl?label=Code%20Size&style=flat)](https://github.com/the-real-tokai/macuahuitl/)
 [![IRC](https://img.shields.io/badge/IRC-irc.libera.chat:6697%20%23macuahuitl-orange&style=flat)](https://web.libera.chat/?channel=#macuahuitl)
+[![Mastodon Follow](https://img.shields.io/mastodon/follow/109326414755382704?domain=social.anoxinon.de&style=flat&label=Follow%20binaryriot%20on%20Mastodon&color=blue)](https://social.anoxinon.de/@binaryriot)
 [![Twitter Follow](https://img.shields.io/twitter/follow/binaryriot?color=blue&label=Follow%20%40binaryriot&style=flat)](https://twitter.com/binaryriot)
 
 ## Synopsis
@@ -52,19 +53,19 @@ also supports optional PNG output (with `cairosvg`), and has a handful of parame
 
 ### Atlatl
 
-coming soon.
+coming soon.[^1]
 
 ### Xonacatl
 
-coming soon.
+coming soon.[^1]
 
 ### Acahualli
 
-coming soon.
+coming soon.[^1]
 
 ### Ohtli
 
-coming soon.
+coming soon.[^1]
 
 ### Temo
 
@@ -90,8 +91,12 @@ generated artwork.
 
 ## Copyright and License
 
-Copyright © 2019-2021 Christian Rosentreter
+Copyright © 2019-2026 Christian Rosentreter
 (https://www.binaryriot.org/)
 
 All scripts are free software: you can redistribute them and/or modify them under the terms of the [GNU Affero General Public License](LICENSE) as
 published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+[^1]: All works in this repository are human-made. With so called "AI" slurping everything up without any regards to licenses applied to
+source codes I'm very hesitant to push the already announced and unannounced remaining scripts. I have not decided how to progress further with it, so
+for the time beeing only the already released scripts will be publicly maintained here on GitHub.
