@@ -4,7 +4,7 @@
 	Creates a colorful maze inspired by a famous one line C64 BASIC
 	program.
 
-	Copyright © 2020 Christian Rosentreter
+	Copyright © 2020,2026 Christian Rosentreter
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as published
@@ -19,7 +19,7 @@
 	You should have received a copy of the GNU Affero General Public License
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-	$Id: temo.py 164 2020-07-09 12:18:58Z tokai $
+	$Id: temo.py 166 2020-07-16 20:39:42Z tokai $
 """
 
 import random
@@ -32,7 +32,7 @@ from enum import Enum
 import xml.etree.ElementTree as xtree
 
 __author__  = 'Christian Rosentreter'
-__version__ = '1.3'
+__version__ = '1.4'
 __all__     = []
 
 
@@ -144,6 +144,7 @@ def main():
 	g.add_argument('--background-color', metavar='COLOR',    type=str,   help='SVG compliant color specification or identifier; adds a background <rect> to the SVG output')
 	g.add_argument('--hue-shift',        metavar='FLOAT',    type=float, help='amount to rotate an imaginary color wheel before looking up new colors (in degrees)  [:15.0]', default=15.0)
 	g.add_argument('--hue-shift-line',   metavar='FLOAT',    type=float, help='separate hue shift for continuous lines; if not passed `--hue-shift\' applies too')
+	g.add_argument('--bias',             metavar='FLOAT',    type=float, help='directional bias of the maze elements, between -100%% and +100%%, 0 == Off  [:0]', default=0)
 	g.add_argument('--best-path-width',  metavar='FLOAT',    type=float, help='show the best (aka the longest) path through the maze and set width of its marker line')
 
 	g = ap.add_argument_group('Schotter')
@@ -167,6 +168,7 @@ def main():
 	rows       = []
 	master_hue = chaos.uniform(0,360)
 	huesl      = user_input.hue_shift if user_input.hue_shift_line is None else user_input.hue_shift_line
+	bias       = (max(-100.0, min(100.0, user_input.bias)) + 100.0) / 200.0   # clipped user input: -100 to 100, normalized: 0 to 1.0
 
 	for y in range(0, user_input.rows):
 		# master_hue = (360 / user_input.rows * y) % 360
@@ -175,7 +177,17 @@ def main():
 			xoffset = 0
 			yoffset = 0
 			angle   = 0
-			slope   = chaos.choice([Slope.UP, Slope.DOWN])
+			
+			# Note: chaos.choices() yields different results than chaos.choice(), even with a 50:50 weight
+			#       ratio. To not break the old behavior of the script we only trigger chaos.choices() when
+			#       a bias was given.
+			if user_input.bias:
+				slope = chaos.choices([Slope.UP, Slope.DOWN],
+					[(100 * (1.0 - bias)), (100 * bias)], 
+					k=1)[0]
+			else:
+				#  Original behavior
+				slope = chaos.choice([Slope.UP, Slope.DOWN])
 
 			hue     = lookup_hue(slope, x, y, rows, huesl)
 			if hue is None:

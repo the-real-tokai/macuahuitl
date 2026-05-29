@@ -28,7 +28,8 @@ pip --install cairosvg --user
 usage: temo.py [-V] [-h] [--columns INT] [--rows INT] [--scale FLOAT]
                [--random-seed INT] [--frame FLOAT] [--stroke-width FLOAT]
                [--background-color COLOR] [--hue-shift FLOAT]
-               [--hue-shift-line FLOAT] [--best-path-width FLOAT]
+               [--hue-shift-line FLOAT] [--bias FLOAT]
+               [--best-path-width FLOAT]
                [--schotter-falloff {infinite,horizontal,vertical,radial,box,random}]
                [--schotter-inverse] [--schotter-rotation FLOAT]
                [--schotter-offset FLOAT] [-o FILENAME] [--output-size INT]
@@ -55,6 +56,8 @@ Miscellaneous:
   --hue-shift-line FLOAT
                         separate hue shift for continuous lines; if not passed
                         `--hue-shift' applies too
+  --bias FLOAT          directional bias of the maze elements, between -100%
+                        and +100%, 0 == Off  [:0]
   --best-path-width FLOAT
                         show the best (aka the longest) path through the maze
                         and set width of its marker line
@@ -114,6 +117,15 @@ Output:
 ## History
 
 <table>
+	<tr>
+		<td valign=top>1.4</td>
+		<td valign=top nowrap>29-May-2026</td>
+		<td>
+			<ul>
+				<li>Added '--bias' option</li>
+			</ul>
+		</td>
+	</tr>
 	<tr>
 		<td valign=top>1.3</td>
 		<td valign=top nowrap>09-Jul-2020</td>
